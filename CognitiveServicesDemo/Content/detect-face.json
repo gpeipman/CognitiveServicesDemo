@@ -1,0 +1,121 @@
+﻿[
+  {
+    "faceId": "a2a99cd5-4509-43dd-9e28-9e2a57a7496e",
+    "faceRectangle": {
+      "top": 140,
+      "left": 511,
+      "width": 126,
+      "height": 126
+    },
+    "faceLandmarks": {
+      "pupilLeft": {
+        "x": 552.2,
+        "y": 172.2
+      },
+      "pupilRight": {
+        "x": 599.4,
+        "y": 171.4
+      },
+      "noseTip": {
+        "x": 566.7,
+        "y": 200.9
+      },
+      "mouthLeft": {
+        "x": 557.8,
+        "y": 238.2
+      },
+      "mouthRight": {
+        "x": 595.5,
+        "y": 239.6
+      },
+      "eyebrowLeftOuter": {
+        "x": 534.5,
+        "y": 154.5
+      },
+      "eyebrowLeftInner": {
+        "x": 560.6,
+        "y": 158.1
+      },
+      "eyeLeftOuter": {
+        "x": 545.0,
+        "y": 172.0
+      },
+      "eyeLeftTop": {
+        "x": 552.3,
+        "y": 168.2
+      },
+      "eyeLeftBottom": {
+        "x": 552.5,
+        "y": 176.8
+      },
+      "eyeLeftInner": {
+        "x": 560.0,
+        "y": 172.4
+      },
+      "eyebrowRightInner": {
+        "x": 582.8,
+        "y": 156.1
+      },
+      "eyebrowRightOuter": {
+        "x": 622.2,
+        "y": 161.7
+      },
+      "eyeRightInner": {
+        "x": 590.4,
+        "y": 171.7
+      },
+      "eyeRightTop": {
+        "x": 600.0,
+        "y": 167.3
+      },
+      "eyeRightBottom": {
+        "x": 600.5,
+        "y": 176.2
+      },
+      "eyeRightOuter": {
+        "x": 608.9,
+        "y": 171.8
+      },
+      "noseRootLeft": {
+        "x": 563.2,
+        "y": 171.6
+      },
+      "noseRootRight": {
+        "x": 578.9,
+        "y": 171.9
+      },
+      "noseLeftAlarTop": {
+        "x": 559.4,
+        "y": 193.3
+      },
+      "noseRightAlarTop": {
+        "x": 580.7,
+        "y": 193.5
+      },
+      "noseLeftAlarOutTip": {
+        "x": 554.7,
+        "y": 205.1
+      },
+      "noseRightAlarOutTip": {
+        "x": 586.2,
+        "y": 205.3
+      },
+      "upperLipTop": {
+        "x": 572.1,
+        "y": 225.0
+      },
+      "upperLipBottom": {
+        "x": 572.0,
+        "y": 232.0
+      },
+      "underLipTop": {
+        "x": 572.3,
+        "y": 238.4
+      },
+      "underLipBottom": {
+        "x": 572.5,
+        "y": 246.8
+      }
+    }
+  }
+]
