@@ -9,7 +9,7 @@
         <h2>Person groups</h2>
 
         <p>
-            @Html.ActionLink("Create New", "PersonGroupCreate")
+            @Html.ActionLink("Create New", "Create")
         </p>
 
         <table class="table">
@@ -25,8 +25,8 @@
                     <td>@item.PersonGroupId</td>
                     <td>@item.Name</td>
                     <td>
-                        @Html.ActionLink("Details", "PersonGroupDetails", new { id = item.PersonGroupId }) |
-                        @Html.ActionLink("Delete", "PersonGroupDelete", new { id = item.PersonGroupId })
+                        @Html.ActionLink("Details", "Details", new { id = item.PersonGroupId }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.PersonGroupId })
                     </td>
                 </tr>
             }

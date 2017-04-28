@@ -134,7 +134,11 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\FacesController.cs" />
+    <Compile Include="Areas\Faces\Controllers\FacesBaseController.cs" />
+    <Compile Include="Areas\Faces\Controllers\DetectController.cs" />
+    <Compile Include="Areas\Faces\Controllers\HomeController.cs" />
+    <Compile Include="Areas\Faces\Controllers\PersonGroupsController.cs" />
+    <Compile Include="Areas\Faces\FacesAreaRegistration.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -159,6 +163,13 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Areas\Faces\Views\web.config" />
+    <Content Include="Areas\Faces\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Faces\Views\Detect\Index.cshtml" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -171,6 +182,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
@@ -188,15 +200,15 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Faces\DetectFaces.cshtml" />
-    <Content Include="Views\Shared\_FacesMenu.cshtml" />
-    <Content Include="Views\Faces\PersonGroups.cshtml" />
-    <Content Include="Views\Faces\PersonGroupCreate.cshtml" />
-    <Content Include="Views\Faces\PersonGroupDetails.cshtml" />
+    <Content Include="Areas\Faces\Views\Shared\_FacesMenu.cshtml" />
+    <Content Include="Areas\Faces\Views\PersonGroups\Index.cshtml" />
+    <Content Include="Areas\Faces\Views\PersonGroups\Create.cshtml" />
+    <Content Include="Areas\Faces\Views\PersonGroups\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
+    <Folder Include="Areas\Faces\Views\Home\" />
     <Folder Include="Models\" />
+    <Folder Include="Views\Faces\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

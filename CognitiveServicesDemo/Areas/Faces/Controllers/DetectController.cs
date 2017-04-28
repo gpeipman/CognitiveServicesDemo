@@ -1,23 +1,16 @@
 ﻿using System;
-using System.Configuration;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Microsoft.ProjectOxford.Face;
 using Microsoft.ProjectOxford.Face.Contract;
 
-namespace CognitiveServicesDemo.Controllers
+namespace CognitiveServicesDemo.Areas.Faces.Controllers
 {
-    public class FacesController : Controller
+    public class DetectController : FacesBaseController
     {
-        public ActionResult Index()
-        {
-            return View();
-        }
-
-        public async Task<ActionResult> DetectFaces()
+        public async Task<ActionResult> Index()
         {
             if (Request.HttpMethod == "GET")
             {
@@ -67,67 +60,5 @@ namespace CognitiveServicesDemo.Controllers
 
             return View((object)imageResult);
         }
-
-        public async Task<ActionResult> PersonGroups()
-        {
-            using (var client = GetFaceClient())
-            {
-                var groups = await client.ListPersonGroupsAsync();
-
-                return View(groups);
-            }
-        }
-
-
-
-        public async Task<ActionResult> PersonGroupDetails(string id)
-        {
-            using (var client = GetFaceClient())
-            {
-                var model = await client.GetPersonGroupAsync(id);
-
-                return View(model);
-            }
-        }
-
-        [HttpGet]
-        public ActionResult PersonGroupCreate()
-        {
-            return View(new PersonGroup());
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> PersonGroupCreate(PersonGroup model)
-        {
-            try
-            {
-                using (var client = GetFaceClient())
-                {
-                    await client.CreatePersonGroupAsync(model.PersonGroupId, model.Name, model.UserData);
-                }
-            }
-            catch(Exception ex)
-            {
-                ModelState.AddModelError("_FORM", ex);
-                return View(model);
-            }
-
-            return RedirectToAction("PersonGroups");
-        }
-
-        [NonAction]
-        private FaceServiceClient GetFaceClient()
-        {
-            var apiKey = ConfigurationManager.AppSettings["CognitiveServicesKey"];
-
-            return new FaceServiceClient(apiKey);
-        }
-    }
-
-    public class Blah
-    {
-        public string Name { get; set; }
-        public string PersonGroupId { get; set; }
-        public string UserData { get; set; }
     }
 }
