@@ -2,7 +2,6 @@
 @{
     ViewBag.Title = "Create person group";
 }
-
 <h2>Create person group</h2>
 
 @using (Html.BeginForm())
@@ -11,7 +10,7 @@
     
     <div class="form-horizontal">
         <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.ValidationSummary(false, null, new { @class = "text-danger" })
 
         <div class="form-group">
             @Html.LabelFor(model => model.PersonGroupId, htmlAttributes: new { @class = "control-label col-md-2" })
