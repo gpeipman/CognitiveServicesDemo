@@ -190,6 +190,9 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Faces\DetectFaces.cshtml" />
     <Content Include="Views\Shared\_FacesMenu.cshtml" />
+    <Content Include="Views\Faces\PersonGroups.cshtml" />
+    <Content Include="Views\Faces\PersonGroupCreate.cshtml" />
+    <Content Include="Views\Faces\PersonGroupDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

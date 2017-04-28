@@ -29,7 +29,7 @@ namespace CognitiveServicesDemo.Controllers
             Face[] faces;
 
             // input stream will be actually disposed by client
-            using (var client = new FaceServiceClient(ConfigurationManager.AppSettings["CognitiveServicesKey"]))
+            using (var client = GetFaceClient())
             using (var analyzeCopyBuffer = new MemoryStream())
             {
                 file.InputStream.CopyTo(analyzeCopyBuffer);
@@ -67,5 +67,67 @@ namespace CognitiveServicesDemo.Controllers
 
             return View((object)imageResult);
         }
+
+        public async Task<ActionResult> PersonGroups()
+        {
+            using (var client = GetFaceClient())
+            {
+                var groups = await client.ListPersonGroupsAsync();
+
+                return View(groups);
+            }
+        }
+
+
+
+        public async Task<ActionResult> PersonGroupDetails(string id)
+        {
+            using (var client = GetFaceClient())
+            {
+                var model = await client.GetPersonGroupAsync(id);
+
+                return View(model);
+            }
+        }
+
+        [HttpGet]
+        public ActionResult PersonGroupCreate()
+        {
+            return View(new PersonGroup());
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> PersonGroupCreate(PersonGroup model)
+        {
+            try
+            {
+                using (var client = GetFaceClient())
+                {
+                    await client.CreatePersonGroupAsync(model.PersonGroupId, model.Name, model.UserData);
+                }
+            }
+            catch(Exception ex)
+            {
+                ModelState.AddModelError("_FORM", ex);
+                return View(model);
+            }
+
+            return RedirectToAction("PersonGroups");
+        }
+
+        [NonAction]
+        private FaceServiceClient GetFaceClient()
+        {
+            var apiKey = ConfigurationManager.AppSettings["CognitiveServicesKey"];
+
+            return new FaceServiceClient(apiKey);
+        }
+    }
+
+    public class Blah
+    {
+        public string Name { get; set; }
+        public string PersonGroupId { get; set; }
+        public string UserData { get; set; }
     }
 }

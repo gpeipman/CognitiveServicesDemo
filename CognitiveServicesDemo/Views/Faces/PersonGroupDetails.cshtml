@@ -1,0 +1,37 @@
+﻿@model PersonGroup
+@{
+    ViewBag.Title = "Person group " + Model.Name;
+}
+
+<h2>Person group details</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PersonGroupId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PersonGroupId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UserData)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UserData)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Back to List", "PersonGroups")
+</p>

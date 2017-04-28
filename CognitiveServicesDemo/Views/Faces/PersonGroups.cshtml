@@ -1,0 +1,35 @@
+﻿@model IEnumerable<PersonGroup>
+@{
+    ViewBag.Title = "Person groups";
+}
+
+<div class="row">
+    @Html.Partial("_FacesMenu");
+    <div class="col-md-8">
+        <h2>Person groups</h2>
+
+        <p>
+            @Html.ActionLink("Create New", "PersonGroupCreate")
+        </p>
+
+        <table class="table">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.PersonGroupId</td>
+                    <td>@item.Name</td>
+                    <td>
+                        @Html.ActionLink("Details", "PersonGroupDetails", new { id = item.PersonGroupId }) |
+                        @Html.ActionLink("Delete", "PersonGroupDelete", new { id = item.PersonGroupId })
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
