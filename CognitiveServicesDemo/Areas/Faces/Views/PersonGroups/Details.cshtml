@@ -1,37 +1,78 @@
-﻿@model PersonGroup
+﻿@model PersonGroupDetailsModel
 @{
-    ViewBag.Title = "Person group " + Model.Name;
+    ViewBag.Title = "Person group " + Model.PersonGroup.Name;
 }
 
 <h2>Person group details</h2>
 
 <div>
+    @Html.ValidationSummary(false, null, new { @class = "text-danger" })
     <hr />
     <dl class="dl-horizontal">
 
         <dt>
-            @Html.DisplayNameFor(model => model.PersonGroupId)
+            @Html.DisplayNameFor(model => model.PersonGroup.PersonGroupId)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.PersonGroupId)
+            @Html.DisplayFor(model => model.PersonGroup.PersonGroupId)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.PersonGroup.Name)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Name)
+            @Html.DisplayFor(model => model.PersonGroup.Name)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.UserData)
+            @Html.DisplayNameFor(model => model.PersonGroup.UserData)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.UserData)
+            @Html.DisplayFor(model => model.PersonGroup.UserData)
         </dd>
+        <hr />
+        @if (Model.TrainingStatus == null)
+        {
+            <dt>
+                TrainingStatus
+            </dt>
+            <dd>
+                None
+            </dd>
+        }
+        else
+        {
+            <dt>
+                TrainingStatus
+            </dt>
+            <dd>
+                @Model.TrainingStatus.Status
+            </dd>
+
+            <dt>
+                Created
+            </dt>
+            <dd>
+                @Model.TrainingStatus.CreatedDateTime
+            </dd>
+
+            <dt>
+                Last actitivity
+            </dt>
+            <dd>
+                @Model.TrainingStatus.LastActionDateTime
+            </dd>
+
+            <dt>
+                Message
+            </dt>
+            <dd>
+                @Model.TrainingStatus.Message
+            </dd>
+        }
 
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Back to List", "PersonGroups")
+    @Html.ActionLink("Back to List", "Index")
 </p>

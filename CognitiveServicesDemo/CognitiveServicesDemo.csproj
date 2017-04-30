@@ -139,6 +139,7 @@
     <Compile Include="Areas\Faces\Controllers\HomeController.cs" />
     <Compile Include="Areas\Faces\Controllers\PersonGroupsController.cs" />
     <Compile Include="Areas\Faces\FacesAreaRegistration.cs" />
+    <Compile Include="Areas\Faces\Models\PersonGroupDetailsModel.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -166,10 +167,6 @@
     <Content Include="Areas\Faces\Views\web.config" />
     <Content Include="Areas\Faces\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Faces\Views\Detect\Index.cshtml" />
-    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="Scripts\jquery-1.10.2.js" />
-    <Content Include="Scripts\jquery-1.10.2.min.js" />
-    <Content Include="Scripts\jquery-1.10.2.min.map" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -182,7 +179,6 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.js" />

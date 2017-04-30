@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using CognitiveServicesDemo.Areas.Faces.Models;
 using Microsoft.ProjectOxford.Face;
 using Microsoft.ProjectOxford.Face.Contract;
 
@@ -13,16 +14,31 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
             using (var client = GetFaceClient())
             {
                 var groups = await client.ListPersonGroupsAsync();
-
+                
                 return View(groups);
             }
         }
 
         public async Task<ActionResult> Details(string id)
         {
+            if(string.IsNullOrEmpty(id))
+            {
+
+            }
+
             using (var client = GetFaceClient())
             {
-                var model = await client.GetPersonGroupAsync(id);
+                var model = new PersonGroupDetailsModel();
+                model.PersonGroup = await client.GetPersonGroupAsync(id);
+
+                try
+                {
+                    model.TrainingStatus = await client.GetPersonGroupTrainingStatusAsync(id);
+                }
+                catch(FaceAPIException fex)
+                {
+                    ModelState.AddModelError(string.Empty, fex.ErrorMessage);
+                }
 
                 return View(model);
             }
@@ -56,6 +72,16 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
             }
 
             return RedirectToAction("Index");
+        }
+
+        public async Task<ActionResult> Train(string id)
+        {
+            using (var client = GetFaceClient())
+            {
+                await client.TrainPersonGroupAsync(id);
+
+                return RedirectToAction("Details", new { id = id });
+            }
         }
     }
 }
