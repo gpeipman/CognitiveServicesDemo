@@ -208,7 +208,6 @@
   <ItemGroup>
     <Folder Include="Areas\Faces\Views\Home\" />
     <Folder Include="Models\" />
-    <Folder Include="Views\Faces\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
