@@ -3,76 +3,81 @@
     ViewBag.Title = "Person group " + Model.PersonGroup.Name;
 }
 
-<h2>Person group details</h2>
+<div class="row">
+    @Html.Partial("_FacesMenu");
+    <div class="col-md-8">
+        <h2>Person group details</h2>
 
-<div>
-    @Html.ValidationSummary(false, null, new { @class = "text-danger" })
-    <hr />
-    <dl class="dl-horizontal">
+        <div>
+            @Html.ValidationSummary(false, null, new { @class = "text-danger" })
+            <hr />
+            <dl class="dl-horizontal">
 
-        <dt>
-            @Html.DisplayNameFor(model => model.PersonGroup.PersonGroupId)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.PersonGroup.PersonGroupId)
-        </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.PersonGroup.PersonGroupId)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.PersonGroup.PersonGroupId)
+                </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.PersonGroup.Name)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.PersonGroup.Name)
-        </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.PersonGroup.Name)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.PersonGroup.Name)
+                </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.PersonGroup.UserData)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.PersonGroup.UserData)
-        </dd>
-        <hr />
-        @if (Model.TrainingStatus == null)
-        {
-            <dt>
-                TrainingStatus
-            </dt>
-            <dd>
-                None
-            </dd>
-        }
-        else
-        {
-            <dt>
-                TrainingStatus
-            </dt>
-            <dd>
-                @Model.TrainingStatus.Status
-            </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.PersonGroup.UserData)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.PersonGroup.UserData)
+                </dd>
+                <hr />
+                @if (Model.TrainingStatus == null)
+                {
+                    <dt>
+                        TrainingStatus
+                    </dt>
+                    <dd>
+                        None
+                    </dd>
+                }
+                else
+                {
+                    <dt>
+                        TrainingStatus
+                    </dt>
+                    <dd>
+                        @Model.TrainingStatus.Status
+                    </dd>
 
-            <dt>
-                Created
-            </dt>
-            <dd>
-                @Model.TrainingStatus.CreatedDateTime
-            </dd>
+                    <dt>
+                        Created
+                    </dt>
+                    <dd>
+                        @Model.TrainingStatus.CreatedDateTime
+                    </dd>
 
-            <dt>
-                Last actitivity
-            </dt>
-            <dd>
-                @Model.TrainingStatus.LastActionDateTime
-            </dd>
+                    <dt>
+                        Last actitivity
+                    </dt>
+                    <dd>
+                        @Model.TrainingStatus.LastActionDateTime
+                    </dd>
 
-            <dt>
-                Message
-            </dt>
-            <dd>
-                @Model.TrainingStatus.Message
-            </dd>
-        }
+                    <dt>
+                        Message
+                    </dt>
+                    <dd>
+                        @Model.TrainingStatus.Message
+                    </dd>
+                }
 
-    </dl>
+            </dl>
+        </div>
+        <p>
+            @Html.ActionLink("Back to List", "Index")
+        </p>
+    </div>
 </div>
-<p>
-    @Html.ActionLink("Back to List", "Index")
-</p>

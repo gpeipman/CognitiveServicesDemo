@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Microsoft.ProjectOxford.Face;
@@ -107,6 +108,34 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
             }
 
             return View(person);
+        }
+
+        [HttpGet]
+        public ActionResult AddFace(string id, string personId)
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> AddFace()
+        {
+            var id = Request["id"];
+            var personId = Guid.Parse(Request["personId"]);
+
+            using (var client = GetFaceClient())
+            {
+                try
+                {
+                    await client.AddPersonFaceAsync(id, personId, Request.Files[0].InputStream);
+                }
+                catch(Exception ex)
+                {
+                    ViewBag["Error"] = ex.Message;
+                    return View();
+                }
+            }
+
+            return RedirectToAction("Index", new { id = id });
         }
     }
 }

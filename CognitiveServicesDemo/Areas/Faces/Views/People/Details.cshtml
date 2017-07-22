@@ -3,34 +3,49 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Person details</h2>
+<div class="row">
+    @Html.Partial("_FacesMenu");
+    <div class="col-md-8">
+        <h2>Person details</h2>
 
-<div>
-    <hr />
-    <dl class="dl-horizontal">
+        <div>
+            <hr />
+            <dl class="dl-horizontal">
 
-        <dt>
-            @Html.DisplayNameFor(model => model.PersonId)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.PersonId)
-        </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.PersonId)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.PersonId)
+                </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Name)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Name)
+                </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.UserData)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.UserData)
-        </dd>
-    </dl>
+                <dt>
+                    @Html.DisplayNameFor(model => model.UserData)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.UserData)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.PersistedFaceIds)
+                </dt>
+                <dd>
+                    @foreach (var id in Model.PersistedFaceIds)
+            {
+                        @id <br />
+                    }
+                </dd>
+            </dl>
+        </div>
+        <p>
+            @Html.ActionLink("Back to List", "Index", new { id = Request.RequestContext.RouteData.Values["id"] })
+        </p>
+    </div>
 </div>
-<p>
-    @Html.ActionLink("Back to List", "Index", new { id = Request.RequestContext.RouteData.Values["id"] })
-</p>

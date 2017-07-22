@@ -27,6 +27,7 @@
                     <td>
                         @Html.ActionLink("Details", "Details", new { id = ViewBag.PersonGroupId, personId = item.PersonId }) |
                         @Html.ActionLink("Edit", "Edit", new { id = ViewBag.PersonGroupId, personId = item.PersonId }) |
+                        @Html.ActionLink("Add face", "AddFace", new { id = ViewBag.PersonGroupId, personId = item.PersonId }) |
                         @Html.ActionLink("Delete", "Delete", new { id = ViewBag.PersonGroupId, personId = item.PersonId })
                     </td>
                 </tr>
