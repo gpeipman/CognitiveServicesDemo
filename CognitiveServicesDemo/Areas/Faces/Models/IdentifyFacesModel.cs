@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Web.Mvc;
 using Microsoft.ProjectOxford.Face.Contract;
 
@@ -16,6 +17,13 @@ namespace CognitiveServicesDemo.Areas.Faces.Models
     public class IdentifiedFace
     {
         public Face Face;
+        public Color Color;
         public IDictionary<Guid, string> PersonCandidates = new Dictionary<Guid, string>();
+
+        public string GetHtmlColor()
+        {
+            return "#" + Color.R.ToString("X2") + Color.G.ToString("X2") + Color.B.ToString("X2");
+
+        }
     }
 }

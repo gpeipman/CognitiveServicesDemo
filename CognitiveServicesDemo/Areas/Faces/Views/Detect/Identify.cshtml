@@ -31,7 +31,10 @@
             <ol>
                 @foreach(var face in Model.IdentifiedFaces)
                 {
-                    <li>@string.Join(", ", face.PersonCandidates.Select(p => p.Value).ToArray())</li>
+                    <li> 
+                        <div style="display:inline-block; width:10px; height:10px; background-color: @face.GetHtmlColor()"></div>
+                        @string.Join(", ", face.PersonCandidates.Select(p => p.Value).ToArray())
+                    </li>
                 }
             </ol>
         }

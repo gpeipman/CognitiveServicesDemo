@@ -111,6 +111,11 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
                     results = await _client.IdentifyAsync(personGroupId, faceIds);
                 }
             }
+            catch(FaceAPIException faex)
+            {
+                model.Error = faex.ErrorMessage;
+                return View(model);
+            }
             catch(Exception ex)
             {
                 model.Error = ex.Message;
@@ -129,6 +134,7 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
                     identifiedFace.PersonCandidates.Add(person.PersonId, person.Name);
                 }
 
+                identifiedFace.Color = Settings.ImageSquareColors[model.IdentifiedFaces.Count];
                 model.IdentifiedFaces.Add(identifiedFace);
             }
 
@@ -138,13 +144,12 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
             using (var g = Graphics.FromImage(nonIndexedImg))
             using (var mem = new MemoryStream())
             {
-                g.DrawImage(img, 0, 0, img.Width, img.Height);
+                g.DrawImage(img, 0, 0, img.Width, img.Height);                
 
-                var pen = new Pen(Color.Red, 5);
-
-                foreach (var face in faces)
+                foreach (var face in model.IdentifiedFaces)
                 {
-                    var faceRectangle = face.FaceRectangle;
+                    var faceRectangle = face.Face.FaceRectangle;
+                    var pen = new Pen(face.Color, 5);
                     var rectangle = new Rectangle(faceRectangle.Left,
                                                   faceRectangle.Top,
                                                   faceRectangle.Width,
