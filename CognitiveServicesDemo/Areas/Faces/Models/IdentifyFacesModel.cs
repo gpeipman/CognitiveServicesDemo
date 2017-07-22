@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Web.Mvc;
+using Microsoft.ProjectOxford.Common.Contract;
 using Microsoft.ProjectOxford.Face.Contract;
 
 namespace CognitiveServicesDemo.Areas.Faces.Models
@@ -18,6 +19,8 @@ namespace CognitiveServicesDemo.Areas.Faces.Models
     {
         public Face Face;
         public Color Color;
+        public EmotionScores Emotions;
+
         public IDictionary<Guid, string> PersonCandidates = new Dictionary<Guid, string>();
 
         public string GetHtmlColor()

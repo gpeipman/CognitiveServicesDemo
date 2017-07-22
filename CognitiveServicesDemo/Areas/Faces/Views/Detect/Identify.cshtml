@@ -28,15 +28,39 @@
 
             <h3>Faces</h3>
 
-            <ol>
-                @foreach(var face in Model.IdentifiedFaces)
-                {
-                    <li> 
-                        <div style="display:inline-block; width:10px; height:10px; background-color: @face.GetHtmlColor()"></div>
-                        @string.Join(", ", face.PersonCandidates.Select(p => p.Value).ToArray())
-                    </li>
-                }
-            </ol>
+            <table class="table-bordered">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Person</th>
+                        <th>Anger</th>
+                        <th>Contempt</th>
+                        <th>Disgust</th>
+                        <th>Fear</th>
+                        <th>Happiness</th>
+                        <th>Neutral</th>
+                        <th>Sadness</th>
+                        <th>Surprise</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var face in Model.IdentifiedFaces)
+                    {
+                        <tr>
+                            <td><div style="display:inline-block; width:10px; height:10px; background-color: @face.GetHtmlColor()"></div></td>
+                            <td style="text-align:right">@string.Join(", ", face.PersonCandidates.Select(p => p.Value).ToArray())</td>
+                            <td style="text-align:right">@face.Emotions.Anger.ToString("0")%</td>
+                            <td style="text-align:right">@face.Emotions.Contempt.ToString("0")%</td>
+                            <td style="text-align:right">@face.Emotions.Disgust.ToString("0")%</td>
+                            <td style="text-align:right">@face.Emotions.Fear.ToString("0")%</td>
+                            <td style="text-align:right">@face.Emotions.Happiness.ToString("0")%</td>
+                            <td style="text-align:right">@face.Emotions.Neutral.ToString("0")%</td>
+                            <td style="text-align:right">@face.Emotions.Sadness.ToString("0")%</td>
+                            <td style="text-align:right">@face.Emotions.Surprise.ToString("0")%</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         }
     </div>
 </div>

@@ -16,13 +16,10 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
                 return HttpNotFound("Person group ID is missing");
             }
 
-            using (var client = GetFaceClient())
-            {
-                var model = await client.ListPersonsAsync(id);
-                ViewBag.PersonGroupId = id;
+            var model = await FaceClient.ListPersonsAsync(id);
+            ViewBag.PersonGroupId = id;
 
-                return View(model);
-            }
+            return View(model);
         }
 
         public async Task<ActionResult> Details(string id, Guid? personId)
@@ -37,13 +34,10 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
                 return HttpNotFound();
             }
 
-            using (var client = GetFaceClient())
-            {
-                var model = await client.GetPersonAsync(id, personId.Value);
-                ViewBag.PersonGroupId = id;
+            var model = await FaceClient.GetPersonAsync(id, personId.Value);
+            ViewBag.PersonGroupId = id;
 
-                return View(model);
-            }
+            return View(model);
         }
 
         public ActionResult Create(string id)
@@ -63,12 +57,9 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
         {
             ViewBag.PersonGroupId = id;
 
-            using (var client = GetFaceClient())
-            {
-                var model = await client.GetPersonAsync(id, personId);
+            var model = await FaceClient.GetPersonAsync(id, personId);
 
-                return View(model);
-            }
+            return View(model);
         }
 
         [HttpPost]
@@ -88,19 +79,16 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
 
             try
             {
-                using (var client = GetFaceClient())
+                if (person.PersonId == Guid.Empty)
                 {
-                    if(person.PersonId == Guid.Empty)
-                    {
-                        await client.CreatePersonAsync(personGroupId, person.Name, person.UserData);
-                    }
-                    else
-                    {
-                        await client.UpdatePersonAsync(personGroupId, person.PersonId, person.Name, person.UserData);
-                    }
-
-                    return RedirectToAction("Index", new { id = personGroupId });
+                    await FaceClient.CreatePersonAsync(personGroupId, person.Name, person.UserData);
                 }
+                else
+                {
+                    await FaceClient.UpdatePersonAsync(personGroupId, person.PersonId, person.Name, person.UserData);
+                }
+
+                return RedirectToAction("Index", new { id = personGroupId });
             }
             catch (FaceAPIException fex)
             {
@@ -122,17 +110,14 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
             var id = Request["id"];
             var personId = Guid.Parse(Request["personId"]);
 
-            using (var client = GetFaceClient())
+            try
             {
-                try
-                {
-                    await client.AddPersonFaceAsync(id, personId, Request.Files[0].InputStream);
-                }
-                catch(Exception ex)
-                {
-                    ViewBag.Error = ex.Message;
-                    return View();
-                }
+                await FaceClient.AddPersonFaceAsync(id, personId, Request.Files[0].InputStream);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = ex.Message;
+                return View();
             }
 
             return RedirectToAction("Index", new { id = id });

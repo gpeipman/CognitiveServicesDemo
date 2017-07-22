@@ -11,12 +11,9 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
     {
         public async Task<ActionResult> Index()
         {
-            using (var client = GetFaceClient())
-            {
-                var groups = await client.ListPersonGroupsAsync();
+            var groups = await FaceClient.ListPersonGroupsAsync();
 
-                return View(groups);
-            }
+            return View(groups);
         }
 
         public async Task<ActionResult> Details(string id)
@@ -26,22 +23,19 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
 
             }
 
-            using (var client = GetFaceClient())
+            var model = new PersonGroupDetailsModel();
+            model.PersonGroup = await FaceClient.GetPersonGroupAsync(id);
+
+            try
             {
-                var model = new PersonGroupDetailsModel();
-                model.PersonGroup = await client.GetPersonGroupAsync(id);
-
-                try
-                {
-                    model.TrainingStatus = await client.GetPersonGroupTrainingStatusAsync(id);
-                }
-                catch(FaceAPIException fex)
-                {
-                    ModelState.AddModelError(string.Empty, fex.ErrorMessage);
-                }
-
-                return View(model);
+                model.TrainingStatus = await FaceClient.GetPersonGroupTrainingStatusAsync(id);
             }
+            catch (FaceAPIException fex)
+            {
+                ModelState.AddModelError(string.Empty, fex.ErrorMessage);
+            }
+
+            return View(model);
         }
 
         [HttpGet]
@@ -55,10 +49,7 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
         {
             try
             {
-                using (var client = GetFaceClient())
-                {
-                    await client.CreatePersonGroupAsync(model.PersonGroupId, model.Name, model.UserData);
-                }
+                await FaceClient.CreatePersonGroupAsync(model.PersonGroupId, model.Name, model.UserData);
             }
             catch (FaceAPIException fex)
             {
@@ -76,12 +67,9 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
 
         public async Task<ActionResult> Train(string id)
         {
-            using (var client = GetFaceClient())
-            {
-                await client.TrainPersonGroupAsync(id);
+            await FaceClient.TrainPersonGroupAsync(id);
 
-                return RedirectToAction("Details", new { id = id });
-            }
+            return RedirectToAction("Details", new { id = id });
         }
     }
 }
