@@ -17,7 +17,7 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
 
             using (var client = GetFaceClient())
             {
-                var model = await client.GetPersonsAsync(id);
+                var model = await client.ListPersonsAsync(id);
                 ViewBag.PersonGroupId = id;
 
                 return View(model);
@@ -30,6 +30,7 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
             {
                 return HttpNotFound();
             }
+
             if(personId == null)
             {
                 return HttpNotFound();

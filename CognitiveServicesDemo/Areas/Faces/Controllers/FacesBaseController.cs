@@ -10,8 +10,9 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
         protected FaceServiceClient GetFaceClient()
         {
             var apiKey = ConfigurationManager.AppSettings["CognitiveServicesKey"];
+            var apiRoot = ConfigurationManager.AppSettings["CognitiveServicesApiUrl"];
 
-            return new FaceServiceClient(apiKey);
+            return new FaceServiceClient(apiKey, apiRoot);
         }
     }
 }

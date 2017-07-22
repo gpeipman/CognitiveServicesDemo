@@ -14,7 +14,7 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
             using (var client = GetFaceClient())
             {
                 var groups = await client.ListPersonGroupsAsync();
-                
+
                 return View(groups);
             }
         }
