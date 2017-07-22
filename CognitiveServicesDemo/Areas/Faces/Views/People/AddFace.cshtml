@@ -7,6 +7,11 @@
     <div class="col-md-8">
         <h2>Add face</h2>
 
+        @if(ViewBag.Error != null)
+        {
+            <strong>@ViewBag.Error</strong>
+        }
+
         <form method="post" enctype="multipart/form-data">
             Upload person face: <br />
             <input type="file" name="PersonFace" /><button type="submit">Send</button>

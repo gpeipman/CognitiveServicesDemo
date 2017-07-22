@@ -130,7 +130,7 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
                 }
                 catch(Exception ex)
                 {
-                    ViewBag["Error"] = ex.Message;
+                    ViewBag.Error = ex.Message;
                     return View();
                 }
             }

@@ -1,0 +1,39 @@
+﻿@model IdentifyFacesModel
+@{
+    ViewBag.Title = "Identify";
+    var groups = (PersonGroup[])ViewBag.PersonGroups;
+}
+
+<div class="row">
+    @Html.Partial("_FacesMenu");
+    <div class="col-md-8">
+        <h2>Identify</h2>
+
+        @if(Model.Error != null)
+        {
+            <strong>@Model.Error</strong>
+        }
+
+        <form method="post" enctype="multipart/form-data">
+            Upload photo to analyze: <br />
+            <input type="file" name="ImageToAnalyze" /><br />
+            @Html.DropDownList("personGroupId", Model.PersonGroups)
+            <br />
+            <button type="submit">Send</button>
+        </form>
+
+        @if (Model.ImageDump != null)
+        {
+            <br /><img src="@Model.ImageDump" width="600" style="border: 1px solid darkgray" />
+
+            <h3>Faces</h3>
+
+            <ol>
+                @foreach(var face in Model.IdentifiedFaces)
+                {
+                    <li>@string.Join(", ", face.PersonCandidates.Select(p => p.Value).ToArray())</li>
+                }
+            </ol>
+        }
+    </div>
+</div>
