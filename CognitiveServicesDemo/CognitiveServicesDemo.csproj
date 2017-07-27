@@ -176,6 +176,7 @@
     <Content Include="Areas\Faces\Views\People\Details.cshtml" />
     <Content Include="Areas\Faces\Views\People\AddFace.cshtml" />
     <Content Include="Areas\Faces\Views\Detect\Identify.cshtml" />
+    <Content Include="Areas\Faces\Views\Detect\Emotions.cshtml" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
