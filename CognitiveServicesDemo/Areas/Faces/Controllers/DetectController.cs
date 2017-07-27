@@ -16,6 +16,8 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
     {
         public async Task<ActionResult> Index()
         {
+            ViewBag.Title = "Detect faces";
+
             if (Request.HttpMethod == "GET")
             {
                 return View();
@@ -62,6 +64,61 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
             }
 
             return View((object)imageResult);
+        }
+
+        public async Task<ActionResult> Landmarks()
+        {
+            ViewBag.Title = "Face landmarks";
+
+            if (Request.HttpMethod == "GET")
+            {
+                return View("Index");
+            }
+
+            var imageResult = "";
+            var file = Request.Files[0];
+            Face[] faces;
+
+            // input stream will be actually disposed by client
+            using (var analyzeCopyBuffer = new MemoryStream())
+            {
+                file.InputStream.CopyTo(analyzeCopyBuffer);
+                file.InputStream.Seek(0, SeekOrigin.Begin);
+                analyzeCopyBuffer.Seek(0, SeekOrigin.Begin);
+                faces = await FaceClient.DetectAsync(analyzeCopyBuffer, returnFaceLandmarks: true);
+            }
+
+            using (var img = new Bitmap(file.InputStream))
+            // make copy, drawing on indexed pixel format image is not supported
+            using (var nonIndexedImg = new Bitmap(img.Width, img.Height))
+            using (var g = Graphics.FromImage(nonIndexedImg))
+            using (var mem = new MemoryStream())
+            {
+                g.DrawImage(img, 0, 0, img.Width, img.Height);
+
+                var pen = new Pen(Color.Red, 5);
+
+                foreach (var face in faces)
+                {
+                    var props = typeof(FaceLandmarks).GetProperties();
+                    foreach(var prop in props)
+                    {
+                        if(prop.PropertyType == typeof(FeatureCoordinate))
+                        {
+                            var coordinate = (FeatureCoordinate)prop.GetValue(face.FaceLandmarks);
+                            var rect = new Rectangle((int)coordinate.X, (int)coordinate.Y, 2, 2);
+                            g.DrawRectangle(pen, rect);
+                        }
+                    }
+                }
+
+                nonIndexedImg.Save(mem, ImageFormat.Png);
+
+                var base64 = Convert.ToBase64String(mem.ToArray());
+                imageResult = String.Format("data:image/png;base64,{0}", base64);
+            }
+
+            return View("Index",(object)imageResult);
         }
 
         public async Task<ActionResult> Identify()

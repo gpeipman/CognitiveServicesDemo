@@ -1,12 +1,9 @@
 ﻿@model string
-@{
-    ViewBag.Title = "DetectFace";
-}
 
 <div class="row">
     @Html.Partial("_FacesMenu");
     <div class="col-md-8">
-        <h2>DetectFace</h2>
+        <h2>@ViewBag.Title</h2>
 
         <form method="post" enctype="multipart/form-data">
             Upload photo to analyze: <br />
