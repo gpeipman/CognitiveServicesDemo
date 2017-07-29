@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -7,7 +6,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using CognitiveServicesDemo.Areas.Faces.Models;
-using Microsoft.ProjectOxford.Common.Contract;
 using Microsoft.ProjectOxford.Face;
 using Microsoft.ProjectOxford.Face.Contract;
 
@@ -111,37 +109,24 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
             Guid[] faceIds = new Guid[] { };
             IdentifyResult[] results = new IdentifyResult[] { };
 
-            try
+            await RunOperationOnImage(async stream =>
             {
-                await RunOperationOnImage(async stream =>
-                {
-                    faces = await FaceClient.DetectAsync(stream);
-                    faceIds = faces.Select(f => f.FaceId).ToArray();
+                faces = await FaceClient.DetectAsync(stream);
+                faceIds = faces.Select(f => f.FaceId).ToArray();
 
-                    if (faceIds.Count() > 0)
-                    {
-                        results = await FaceClient.IdentifyAsync(personGroupId, faceIds);
-                    }
-                });
-
-                if (faceIds.Length == 0)
+                if (faceIds.Count() > 0)
                 {
-                    model.Error = "No faces detected";
-                    return View(model);
+                    results = await FaceClient.IdentifyAsync(personGroupId, faceIds);
                 }
-            }
-            catch(FaceAPIException faex)
+            });
+
+            if (faceIds.Length == 0)
             {
-                model.Error = faex.ErrorMessage;
-                return View(model);
-            }
-            catch(Exception ex)
-            {
-                model.Error = ex.Message;
+                model.Error = "No faces detected";
                 return View(model);
             }
 
-            foreach(var result in results)
+            foreach (var result in results)
             {
                 var identifiedFace = new IdentifiedFace();
                 identifiedFace.Face = faces.FirstOrDefault(f => f.FaceId == result.FaceId);
@@ -182,34 +167,21 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
             Guid[] faceIds = new Guid[] { };
             IdentifyResult[] results = new IdentifyResult[] { };
 
-            try
+            await RunOperationOnImage(async stream =>
             {
-                await RunOperationOnImage(async stream =>
-                {
-                    var emotionsType = new[] { FaceAttributeType.Emotion };
-                    faces = await FaceClient.DetectAsync(stream, returnFaceAttributes: emotionsType);
-                    faceIds = faces.Select(f => f.FaceId).ToArray();
+                var emotionsType = new[] { FaceAttributeType.Emotion };
+                faces = await FaceClient.DetectAsync(stream, returnFaceAttributes: emotionsType);
+                faceIds = faces.Select(f => f.FaceId).ToArray();
 
-                    if(faceIds.Length > 0)
-                    {
-                        results = await FaceClient.IdentifyAsync(personGroupId, faceIds);
-                    }
-                });
-
-                if (faceIds.Length == 0)
+                if (faceIds.Length > 0)
                 {
-                    model.Error = "No faces detected";
-                    return View(model);
+                    results = await FaceClient.IdentifyAsync(personGroupId, faceIds);
                 }
-            }
-            catch (FaceAPIException faex)
+            });
+
+            if (faceIds.Length == 0)
             {
-                model.Error = faex.ErrorMessage;
-                return View(model);
-            }
-            catch (Exception ex)
-            {
-                model.Error = ex.Message;
+                model.Error = "No faces detected";
                 return View(model);
             }
 
@@ -262,33 +234,20 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
                 FaceAttributeType.Smile
             };
 
-            try
+            await RunOperationOnImage(async stream =>
             {
-                await RunOperationOnImage(async stream =>
-                {
-                    faces = await FaceClient.DetectAsync(stream, returnFaceAttributes: faceAttributeTypes);
-                    faceIds = faces.Select(f => f.FaceId).ToArray();
+                faces = await FaceClient.DetectAsync(stream, returnFaceAttributes: faceAttributeTypes);
+                faceIds = faces.Select(f => f.FaceId).ToArray();
 
-                    if(faceIds.Length > 0)
-                    {
-                        results = await FaceClient.IdentifyAsync(personGroupId, faceIds);
-                    }
-                });
-
-                if (faceIds.Length == 0)
+                if (faceIds.Length > 0)
                 {
-                    model.Error = "No faces detected";
-                    return View(model);
+                    results = await FaceClient.IdentifyAsync(personGroupId, faceIds);
                 }
-            }
-            catch (FaceAPIException faex)
+            });
+
+            if (faceIds.Length == 0)
             {
-                model.Error = faex.ErrorMessage;
-                return View(model);
-            }
-            catch (Exception ex)
-            {
-                model.Error = ex.Message;
+                model.Error = "No faces detected";
                 return View(model);
             }
 

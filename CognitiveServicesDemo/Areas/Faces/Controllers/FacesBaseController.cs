@@ -7,7 +7,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Microsoft.ProjectOxford.Emotion;
+using CognitiveServicesDemo.Models;
 using Microsoft.ProjectOxford.Face;
 using Microsoft.ProjectOxford.Face.Contract;
 
@@ -16,7 +16,6 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
     public abstract class FacesBaseController : Controller
     {
         protected FaceServiceClient FaceClient { get; private set; }
-        protected EmotionServiceClient EmotionClient { get; private set; }
 
         private Stream _imageToProcess = new MemoryStream();
 
@@ -25,10 +24,6 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
             var apiKey = ConfigurationManager.AppSettings["CognitiveServicesFaceApiKey"];
             var apiRoot = ConfigurationManager.AppSettings["CognitiveServicesFaceApiUrl"];
             FaceClient = new FaceServiceClient(apiKey, apiRoot);
-
-            apiKey = ConfigurationManager.AppSettings["CognitiveServicesEmotionApiKey"];
-            apiRoot = ConfigurationManager.AppSettings["CognitiveServicesEmotionApiUrl"];
-            EmotionClient = new EmotionServiceClient(apiKey, apiRoot);
         }
 
         protected void ResizeImage(Stream fromStream, Stream toStream)
@@ -117,6 +112,37 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
             }
         }
 
+        protected override void OnException(ExceptionContext filterContext)
+        {
+            base.OnException(filterContext);
+
+            if(filterContext.ExceptionHandled)
+            {
+                return;
+            }
+
+            var message = filterContext.Exception.Message;
+            var code = "";
+
+            if (filterContext.Exception is FaceAPIException)
+            {
+                var faex = filterContext.Exception as FaceAPIException;
+                message = faex.ErrorMessage;
+                code = faex.ErrorCode;
+            }
+
+            filterContext.Result = new ViewResult
+            {
+                ViewName = "Error",
+                ViewData = new ViewDataDictionary(filterContext.Controller.ViewData)
+                {
+                    Model = new ErrorModel { Code = code, Message = message }
+                }
+            };
+
+            filterContext.ExceptionHandled = true;
+        }
+
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
@@ -125,6 +151,12 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
             {
                 FaceClient.Dispose();
                 FaceClient = null;
+            }
+
+            if(_imageToProcess != null)
+            {
+                _imageToProcess.Dispose();
+                _imageToProcess = null;
             }
         }
     }

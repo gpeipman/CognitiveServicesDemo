@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@model ErrorModel
+<!DOCTYPE html>
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
@@ -6,8 +7,8 @@
 </head>
 <body>
     <hgroup>
-        <h1>Error.</h1>
-        <h2>An error occurred while processing your request.</h2>
+        <h1>Error @(Model?.Code)</h1>
+        <h2>@(Model?.Message)</h2>
     </hgroup>
 </body>
 </html>
