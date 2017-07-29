@@ -24,14 +24,13 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
                 return View();
             }
 
-            Face[] faces = null;
+            string imageResult = "";
 
             await RunOperationOnImage(async stream =>
             {
-                faces = await FaceClient.DetectAsync(stream);
+                var faces = await FaceClient.DetectAsync(stream);
+                imageResult = GetInlineImageWithFaces(faces);
             });
-
-            var imageResult = GetInlineImageWithFaces( faces);
 
             return View((object)imageResult);
         }
@@ -187,7 +186,8 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
             {
                 await RunOperationOnImage(async stream =>
                 {
-                    faces = await FaceClient.DetectAsync(stream);
+                    var emotionsType = new[] { FaceAttributeType.Emotion };
+                    faces = await FaceClient.DetectAsync(stream, returnFaceAttributes: emotionsType);
                     faceIds = faces.Select(f => f.FaceId).ToArray();
 
                     if(faceIds.Length > 0)
@@ -224,45 +224,9 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
 
                     identifiedFace.PersonCandidates.Add(person.PersonId, person.Name);
                 }
-
-                identifiedFace.Color = Settings.ImageSquareColors[model.IdentifiedFaces.Count];
+                
                 model.IdentifiedFaces.Add(identifiedFace);
-            }
-
-            Emotion[] emotionResults = new Emotion[] { };
-
-            await RunOperationOnImage(async stream =>
-            {
-                emotionResults = await EmotionClient.RecognizeAsync(stream, faces.Select(f => new Microsoft.ProjectOxford.Common.Rectangle
-                {
-                    Height = f.FaceRectangle.Height,
-                    Width = f.FaceRectangle.Width,
-                    Left = f.FaceRectangle.Left,
-                    Top = f.FaceRectangle.Top
-                }).ToArray());
-            });
-
-            foreach (var result in emotionResults)
-            {
-                var face = model.IdentifiedFaces.FirstOrDefault(f =>
-                                    f.Face.FaceRectangle.Height == result.FaceRectangle.Height &&
-                                    f.Face.FaceRectangle.Left == result.FaceRectangle.Left &&
-                                    f.Face.FaceRectangle.Top == result.FaceRectangle.Top &&
-                                    f.Face.FaceRectangle.Width == result.FaceRectangle.Width
-                                );
-
-                if (face != null)
-                {
-                    face.Emotions = new EmotionScores();
-                    face.Emotions.Anger = result.Scores.Anger * 100;
-                    face.Emotions.Contempt = result.Scores.Contempt * 100;
-                    face.Emotions.Disgust = result.Scores.Disgust * 100;
-                    face.Emotions.Fear = result.Scores.Fear * 100;
-                    face.Emotions.Happiness = result.Scores.Happiness * 100;
-                    face.Emotions.Neutral = result.Scores.Neutral * 100;
-                    face.Emotions.Sadness = result.Scores.Sadness * 100;
-                    face.Emotions.Surprise = result.Scores.Surprise * 100;
-                }
+                identifiedFace.Color = Settings.ImageSquareColors[model.IdentifiedFaces.Count];
             }
 
             model.ImageDump = GetInlineImageWithFaces(model.IdentifiedFaces.Select(f => f.Face));

@@ -49,14 +49,14 @@
                         <tr>
                             <td><div style="display:inline-block; width:10px; height:10px; background-color: @face.GetHtmlColor()"></div></td>
                             <td style="text-align:right">@string.Join(", ", face.PersonCandidates.Select(p => p.Value).ToArray())</td>
-                            <td style="text-align:right">@face.Emotions.Anger.ToString("0")%</td>
-                            <td style="text-align:right">@face.Emotions.Contempt.ToString("0")%</td>
-                            <td style="text-align:right">@face.Emotions.Disgust.ToString("0")%</td>
-                            <td style="text-align:right">@face.Emotions.Fear.ToString("0")%</td>
-                            <td style="text-align:right">@face.Emotions.Happiness.ToString("0")%</td>
-                            <td style="text-align:right">@face.Emotions.Neutral.ToString("0")%</td>
-                            <td style="text-align:right">@face.Emotions.Sadness.ToString("0")%</td>
-                            <td style="text-align:right">@face.Emotions.Surprise.ToString("0")%</td>
+                            <td style="text-align:right">@face.Face.FaceAttributes.Emotion.Anger</td>
+                            <td style="text-align:right">@face.Face.FaceAttributes.Emotion.Contempt</td>
+                            <td style="text-align:right">@face.Face.FaceAttributes.Emotion.Disgust</td>
+                            <td style="text-align:right">@face.Face.FaceAttributes.Emotion.Fear</td>
+                            <td style="text-align:right">@face.Face.FaceAttributes.Emotion.Happiness</td>
+                            <td style="text-align:right">@face.Face.FaceAttributes.Emotion.Neutral</td>
+                            <td style="text-align:right">@face.Face.FaceAttributes.Emotion.Sadness</td>
+                            <td style="text-align:right">@face.Face.FaceAttributes.Emotion.Surprise</td>
                         </tr>
                     }
                 </tbody>
