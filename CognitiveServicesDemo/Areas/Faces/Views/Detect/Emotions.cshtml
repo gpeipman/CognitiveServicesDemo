@@ -14,13 +14,7 @@
             <strong>@Model.Error</strong>
         }
 
-        <form method="post" enctype="multipart/form-data">
-            Upload photo to analyze: <br />
-            <input type="file" name="ImageToAnalyze" /><br />
-            @Html.DropDownList("personGroupId", Model.PersonGroups)
-            <br />
-            <button type="submit">Send</button>
-        </form>
+        @Html.Partial("_UploadWithPersonGroups", Model.PersonGroups)
 
         @if (Model.ImageDump != null)
         {

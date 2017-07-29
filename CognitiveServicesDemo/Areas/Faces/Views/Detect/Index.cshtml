@@ -5,10 +5,7 @@
     <div class="col-md-8">
         <h2>@ViewBag.Title</h2>
 
-        <form method="post" enctype="multipart/form-data">
-            Upload photo to analyze: <br />
-            <input type="file" name="ImageToAnalyze" /><button type="submit">Send</button>
-        </form>
+        @Html.Partial("_Upload")
 
         @if (Model != null)
         {

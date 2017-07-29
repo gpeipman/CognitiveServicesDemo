@@ -1,0 +1,11 @@
+﻿@model IList<SelectListItem>
+@{
+    Layout = null;
+}
+<form method="post" enctype="multipart/form-data">
+    Upload photo to analyze: <br />
+    <input type="file" name="ImageToAnalyze" /><br />
+    @Html.DropDownList("personGroupId", Model)
+    <br />
+    <button type="submit">Send</button>
+</form>
