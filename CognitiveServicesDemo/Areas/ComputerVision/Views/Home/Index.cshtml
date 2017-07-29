@@ -1,7 +1,10 @@
-﻿
-@{
-    ViewBag.Title = "Index";
+﻿@model string
+
+<h2>@ViewBag.Title</h2>
+
+@Html.Partial("_Upload")
+
+@if (Model != null)
+{
+    <img src="@Model" width="600" />
 }
-
-<h2>Index</h2>
-
