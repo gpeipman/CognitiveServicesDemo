@@ -4,28 +4,23 @@
     var groups = (PersonGroup[])ViewBag.PersonGroups;
 }
 
-<div class="row">
-    @Html.Partial("_FacesMenu");
-    <div class="col-md-8">
-        <h2>Identify</h2>
+<h2>Identify</h2>
 
-        @if(Model.Error != null)
-        {
-            <strong>@Model.Error</strong>
-        }
+@if (Model.Error != null)
+{
+    <strong>@Model.Error</strong>
+}
 
-        @Html.Partial("_UploadWithPersonGroups", Model.PersonGroups)
+@Html.Partial("_UploadWithPersonGroups", Model.PersonGroups)
 
-        @if (Model.ImageDump != null)
-        {
-            <br /><img src="@Model.ImageDump" width="600" style="border: 1px solid darkgray" />
+@if (Model.ImageDump != null)
+{
+    <br /><img src="@Model.ImageDump" width="600" style="border: 1px solid darkgray" />
 
             <h3>Faces</h3>
-            foreach (var face in Model.IdentifiedFaces)
-            {
-                <div style="display:inline-block; width:10px; height:10px; background-color: @face.GetHtmlColor()"></div>
-                <text>@string.Join(", ", face.PersonCandidates.Select(p => p.Value).ToArray())</text><br />                
-            }
-        }
-    </div>
-</div>
+    foreach (var face in Model.IdentifiedFaces)
+    {
+        <div style="display:inline-block; width:10px; height:10px; background-color: @face.GetHtmlColor()"></div>
+                <text>@string.Join(", ", face.PersonCandidates.Select(p => p.Value).ToArray())</text><br />
+    }
+}

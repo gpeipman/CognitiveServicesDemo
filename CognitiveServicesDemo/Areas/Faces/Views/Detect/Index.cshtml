@@ -1,15 +1,10 @@
 ﻿@model string
 
-<div class="row">
-    @Html.Partial("_FacesMenu");
-    <div class="col-md-8">
-        <h2>@ViewBag.Title</h2>
+<h2>@ViewBag.Title</h2>
 
-        @Html.Partial("_Upload")
+@Html.Partial("_Upload")
 
-        @if (Model != null)
-        {
-            <img src="@Model" width="600" />
-        }
-    </div>
-</div>
+@if (Model != null)
+{
+    <img src="@Model" width="600" />
+}

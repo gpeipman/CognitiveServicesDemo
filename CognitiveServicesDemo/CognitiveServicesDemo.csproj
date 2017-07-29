@@ -132,6 +132,8 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Areas\ComputerVision\ComputerVisionAreaRegistration.cs" />
+    <Compile Include="Areas\ComputerVision\Controllers\HomeController.cs" />
     <Compile Include="Areas\Faces\Controllers\FacesBaseController.cs" />
     <Compile Include="Areas\Faces\Controllers\DetectController.cs" />
     <Compile Include="Areas\Faces\Controllers\HomeController.cs" />
@@ -178,6 +180,10 @@
     <Content Include="Areas\Faces\Views\Detect\Attributes.cshtml" />
     <Content Include="Areas\Faces\Views\Detect\_Upload.cshtml" />
     <Content Include="Areas\Faces\Views\Detect\_UploadWithPersonGroups.cshtml" />
+    <Content Include="Areas\ComputerVision\Views\web.config" />
+    <Content Include="Areas\ComputerVision\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\ComputerVision\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\ComputerVision\Views\Home\Index.cshtml" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -213,6 +219,7 @@
     <Content Include="Areas\Faces\Views\PersonGroups\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Areas\ComputerVision\Models\" />
     <Folder Include="Areas\Faces\Views\Home\" />
   </ItemGroup>
   <ItemGroup>

@@ -3,51 +3,48 @@
     ViewBag.Title = "Person group " + Model.PersonGroup.Name;
 }
 
-<div class="row">
-    @Html.Partial("_FacesMenu");
-    <div class="col-md-8">
-        <h2>Person group details</h2>
+<h2>Person group details</h2>
 
-        <div>
-            @Html.ValidationSummary(false, null, new { @class = "text-danger" })
-            <hr />
-            <dl class="dl-horizontal">
+<div>
+    @Html.ValidationSummary(false, null, new { @class = "text-danger" })
+    <hr />
+    <dl class="dl-horizontal">
 
-                <dt>
-                    @Html.DisplayNameFor(model => model.PersonGroup.PersonGroupId)
-                </dt>
-                <dd>
-                    @Html.DisplayFor(model => model.PersonGroup.PersonGroupId)
-                </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PersonGroup.PersonGroupId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PersonGroup.PersonGroupId)
+        </dd>
 
-                <dt>
-                    @Html.DisplayNameFor(model => model.PersonGroup.Name)
-                </dt>
-                <dd>
-                    @Html.DisplayFor(model => model.PersonGroup.Name)
-                </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PersonGroup.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PersonGroup.Name)
+        </dd>
 
-                <dt>
-                    @Html.DisplayNameFor(model => model.PersonGroup.UserData)
-                </dt>
-                <dd>
-                    @Html.DisplayFor(model => model.PersonGroup.UserData)
-                </dd>
-                <hr />
-                @if (Model.TrainingStatus == null)
-                {
-                    <dt>
-                        TrainingStatus
-                    </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.PersonGroup.UserData)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PersonGroup.UserData)
+        </dd>
+        <hr />
+        @if (Model.TrainingStatus == null)
+        {
+            <dt>
+                TrainingStatus
+            </dt>
                     <dd>
                         None
                     </dd>
-                }
-                else
-                {
-                    <dt>
-                        TrainingStatus
-                    </dt>
+        }
+        else
+        {
+            <dt>
+                TrainingStatus
+            </dt>
                     <dd>
                         @Model.TrainingStatus.Status
                     </dd>
@@ -72,12 +69,10 @@
                     <dd>
                         @Model.TrainingStatus.Message
                     </dd>
-                }
+        }
 
-            </dl>
-        </div>
-        <p>
-            @Html.ActionLink("Back to List", "Index")
-        </p>
-    </div>
+    </dl>
 </div>
+<p>
+    @Html.ActionLink("Back to List", "Index")
+</p>

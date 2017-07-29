@@ -2,21 +2,16 @@
     ViewBag.Title = "AddFace";
 }
 
-<div class="row">
-    @Html.Partial("_FacesMenu");
-    <div class="col-md-8">
-        <h2>Add face</h2>
+<h2>Add face</h2>
 
-        @if(ViewBag.Error != null)
-        {
-            <strong>@ViewBag.Error</strong>
-        }
+@if (ViewBag.Error != null)
+{
+    <strong>@ViewBag.Error</strong>
+}
 
-        <form method="post" enctype="multipart/form-data">
-            Upload person face: <br />
-            <input type="file" name="PersonFace" /><button type="submit">Send</button>
-            <input type="hidden" name="id" value="@Request.RequestContext.RouteData.Values["id"]" />
-            <input type="hidden" name="personId" value="@Request.RequestContext.RouteData.Values["personId"]" />
-        </form>
-    </div>
-</div>
+<form method="post" enctype="multipart/form-data">
+    Upload person face: <br />
+    <input type="file" name="PersonFace" /><button type="submit">Send</button>
+    <input type="hidden" name="id" value="@Request.RequestContext.RouteData.Values["id"]" />
+    <input type="hidden" name="personId" value="@Request.RequestContext.RouteData.Values["personId"]" />
+</form>

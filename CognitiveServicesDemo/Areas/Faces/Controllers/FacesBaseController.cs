@@ -106,6 +106,8 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
         {
             base.OnActionExecuting(filterContext);
 
+            ViewBag.LeftMenu = "_FacesMenu";
+
             if(Request.Files.Count > 0)
             {
                 ResizeImage(Request.Files[0].InputStream, _imageToProcess);

@@ -4,21 +4,18 @@
     var groups = (PersonGroup[])ViewBag.PersonGroups;
 }
 
-<div class="row">
-    @Html.Partial("_FacesMenu");
-    <div class="col-md-8">
-        <h2>Emotions</h2>
+<h2>Emotions</h2>
 
-        @if (Model.Error != null)
-        {
-            <strong>@Model.Error</strong>
-        }
+@if (Model.Error != null)
+{
+    <strong>@Model.Error</strong>
+}
 
-        @Html.Partial("_UploadWithPersonGroups", Model.PersonGroups)
+@Html.Partial("_UploadWithPersonGroups", Model.PersonGroups)
 
-        @if (Model.ImageDump != null)
-        {
-            <br /><img src="@Model.ImageDump" width="600" style="border: 1px solid darkgray" />
+@if (Model.ImageDump != null)
+{
+    <br /><img src="@Model.ImageDump" width="600" style="border: 1px solid darkgray" />
 
             <h3>Faces</h3>
 
@@ -55,6 +52,4 @@
                     }
                 </tbody>
             </table>
-        }
-    </div>
-</div>
+}
