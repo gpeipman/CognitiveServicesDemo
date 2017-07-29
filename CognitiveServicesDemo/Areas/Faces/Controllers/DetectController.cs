@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -23,45 +24,14 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
                 return View();
             }
 
-            var imageResult = "";
-            var file = Request.Files[0];
-            Face[] faces;
+            Face[] faces = null;
 
-            // input stream will be actually disposed by client
-            using (var analyzeCopyBuffer = new MemoryStream())
+            await RunOperationOnImage(async stream =>
             {
-                file.InputStream.CopyTo(analyzeCopyBuffer);
-                file.InputStream.Seek(0, SeekOrigin.Begin);
-                analyzeCopyBuffer.Seek(0, SeekOrigin.Begin);
-                faces = await FaceClient.DetectAsync(analyzeCopyBuffer);
-            }
+                faces = await FaceClient.DetectAsync(stream);
+            });
 
-            using (var img = new Bitmap(file.InputStream))
-            // make copy, drawing on indexed pixel format image is not supported
-            using (var nonIndexedImg = new Bitmap(img.Width, img.Height))
-            using (var g = Graphics.FromImage(nonIndexedImg))
-            using (var mem = new MemoryStream())
-            {
-                g.DrawImage(img, 0, 0, img.Width, img.Height);
-
-                var pen = new Pen(Color.Red, 5);
-
-                foreach (var face in faces)
-                {
-                    var faceRectangle = face.FaceRectangle;
-                    var rectangle = new Rectangle(faceRectangle.Left,
-                                                  faceRectangle.Top,
-                                                  faceRectangle.Width,
-                                                  faceRectangle.Height);
-
-                    g.DrawRectangle(pen, rectangle);
-                }
-
-                nonIndexedImg.Save(mem, ImageFormat.Png);
-
-                var base64 = Convert.ToBase64String(mem.ToArray());
-                imageResult = String.Format("data:image/png;base64,{0}", base64);
-            }
+            var imageResult = GetInlineImageWithFaces( faces);
 
             return View((object)imageResult);
         }
@@ -138,28 +108,27 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
                 return View(model);
             }
 
-            var file = Request.Files[0];
-            Face[] faces;
-            IdentifyResult[] results;
+            Face[] faces = new Face[] { };
+            Guid[] faceIds = new Guid[] { };
+            IdentifyResult[] results = new IdentifyResult[] { };
 
             try
             {
-                // input stream will be actually disposed by client
-                using (var analyzeCopyBuffer = new MemoryStream())
+                await RunOperationOnImage(async stream =>
                 {
-                    file.InputStream.CopyTo(analyzeCopyBuffer);
-                    file.InputStream.Seek(0, SeekOrigin.Begin);
-                    analyzeCopyBuffer.Seek(0, SeekOrigin.Begin);
-                    faces = await FaceClient.DetectAsync(analyzeCopyBuffer);
-                    var faceIds = faces.Select(f => f.FaceId).ToArray();
+                    faces = await FaceClient.DetectAsync(stream);
+                    faceIds = faces.Select(f => f.FaceId).ToArray();
 
-                    if(faceIds.Length == 0)
+                    if (faceIds.Count() > 0)
                     {
-                        model.Error = "No faces detected";
-                        return View(model);
+                        results = await FaceClient.IdentifyAsync(personGroupId, faceIds);
                     }
+                });
 
-                    results = await FaceClient.IdentifyAsync(personGroupId, faceIds);
+                if (faceIds.Length == 0)
+                {
+                    model.Error = "No faces detected";
+                    return View(model);
                 }
             }
             catch(FaceAPIException faex)
@@ -189,60 +158,7 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
                 model.IdentifiedFaces.Add(identifiedFace);
             }
 
-            Emotion[] emotionResults;
-
-            using (var mem = new MemoryStream())
-            {
-                file.InputStream.CopyTo(mem);
-                file.InputStream.Seek(0, SeekOrigin.Begin);
-                mem.Seek(0, SeekOrigin.Begin);
-
-                emotionResults = await EmotionClient.RecognizeAsync(mem, faces.Select(f => new Microsoft.ProjectOxford.Common.Rectangle
-                {
-                    Height = f.FaceRectangle.Height,
-                    Width = f.FaceRectangle.Width,
-                    Left = f.FaceRectangle.Left,
-                    Top = f.FaceRectangle.Top
-                }).ToArray());
-            }
-
-            foreach(var result in emotionResults)
-            {
-                var face = model.IdentifiedFaces.FirstOrDefault(f =>
-                                    f.Face.FaceRectangle.Height == result.FaceRectangle.Height &&
-                                    f.Face.FaceRectangle.Left == result.FaceRectangle.Left &&
-                                    f.Face.FaceRectangle.Top == result.FaceRectangle.Top && 
-                                    f.Face.FaceRectangle.Width == result.FaceRectangle.Width
-                                );
-            }
-
-            file.InputStream.Seek(0, SeekOrigin.Begin);
-            using (var img = new Bitmap(file.InputStream))
-            // make copy, drawing on indexed pixel format image is not supported
-            using (var nonIndexedImg = new Bitmap(img.Width, img.Height))
-            using (var g = Graphics.FromImage(nonIndexedImg))
-            using (var mem = new MemoryStream())
-            {
-                g.DrawImage(img, 0, 0, img.Width, img.Height);                
-
-                foreach (var face in model.IdentifiedFaces)
-                {
-                    var faceRectangle = face.Face.FaceRectangle;
-                    var pen = new Pen(face.Color, 5);
-                    var rectangle = new Rectangle(faceRectangle.Left,
-                                                  faceRectangle.Top,
-                                                  faceRectangle.Width,
-                                                  faceRectangle.Height);
-
-                    g.DrawRectangle(pen, rectangle);
-                }
-
-                nonIndexedImg.Save(mem, ImageFormat.Png);
-
-                var base64 = Convert.ToBase64String(mem.ToArray());
-                model.ImageDump = String.Format("data:image/png;base64,{0}", base64);
-            }
-
+            model.ImageDump = GetInlineImageWithFaces(model.IdentifiedFaces.Select(f => f.Face));
             return View(model);
         }
 
@@ -263,28 +179,27 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
                 return View(model);
             }
 
-            var file = Request.Files[0];
-            Face[] faces;
-            IdentifyResult[] results;
+            Face[] faces = new Face[] { };
+            Guid[] faceIds = new Guid[] { };
+            IdentifyResult[] results = new IdentifyResult[] { };
 
             try
             {
-                // input stream will be actually disposed by client
-                using (var analyzeCopyBuffer = new MemoryStream())
+                await RunOperationOnImage(async stream =>
                 {
-                    file.InputStream.CopyTo(analyzeCopyBuffer);
-                    file.InputStream.Seek(0, SeekOrigin.Begin);
-                    analyzeCopyBuffer.Seek(0, SeekOrigin.Begin);
-                    faces = await FaceClient.DetectAsync(analyzeCopyBuffer);
-                    var faceIds = faces.Select(f => f.FaceId).ToArray();
+                    faces = await FaceClient.DetectAsync(stream);
+                    faceIds = faces.Select(f => f.FaceId).ToArray();
 
-                    if (faceIds.Length == 0)
+                    if(faceIds.Length > 0)
                     {
-                        model.Error = "No faces detected";
-                        return View(model);
+                        results = await FaceClient.IdentifyAsync(personGroupId, faceIds);
                     }
+                });
 
-                    results = await FaceClient.IdentifyAsync(personGroupId, faceIds);
+                if (faceIds.Length == 0)
+                {
+                    model.Error = "No faces detected";
+                    return View(model);
                 }
             }
             catch (FaceAPIException faex)
@@ -314,22 +229,18 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
                 model.IdentifiedFaces.Add(identifiedFace);
             }
 
-            Emotion[] emotionResults;
+            Emotion[] emotionResults = new Emotion[] { };
 
-            using (var mem = new MemoryStream())
+            await RunOperationOnImage(async stream =>
             {
-                file.InputStream.CopyTo(mem);
-                file.InputStream.Seek(0, SeekOrigin.Begin);
-                mem.Seek(0, SeekOrigin.Begin);
-
-                emotionResults = await EmotionClient.RecognizeAsync(mem, faces.Select(f => new Microsoft.ProjectOxford.Common.Rectangle
+                emotionResults = await EmotionClient.RecognizeAsync(stream, faces.Select(f => new Microsoft.ProjectOxford.Common.Rectangle
                 {
                     Height = f.FaceRectangle.Height,
                     Width = f.FaceRectangle.Width,
                     Left = f.FaceRectangle.Left,
                     Top = f.FaceRectangle.Top
                 }).ToArray());
-            }
+            });
 
             foreach (var result in emotionResults)
             {
@@ -354,32 +265,86 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
                 }
             }
 
-            file.InputStream.Seek(0, SeekOrigin.Begin);
-            using (var img = new Bitmap(file.InputStream))
-            // make copy, drawing on indexed pixel format image is not supported
-            using (var nonIndexedImg = new Bitmap(img.Width, img.Height))
-            using (var g = Graphics.FromImage(nonIndexedImg))
-            using (var mem = new MemoryStream())
+            model.ImageDump = GetInlineImageWithFaces(model.IdentifiedFaces.Select(f => f.Face));
+
+            return View(model);
+        }
+
+        public async Task<ActionResult> Attributes()
+        {
+            var personGroupId = Request["PersonGroupId"];
+            var model = new IdentifyFacesModel();
+
+            var groups = await FaceClient.ListPersonGroupsAsync();
+            model.PersonGroups = groups.Select(g => new SelectListItem
             {
-                g.DrawImage(img, 0, 0, img.Width, img.Height);
+                Value = g.PersonGroupId,
+                Text = g.Name
+            }).ToList();
 
-                foreach (var face in model.IdentifiedFaces)
+            if (Request.HttpMethod == "GET")
+            {
+                return View(model);
+            }
+
+            Face[] faces = new Face[] { };
+            Guid[] faceIds = new Guid[] { };
+            IdentifyResult[] results = new IdentifyResult[] { };
+            var faceAttributeTypes = new[] {
+                FaceAttributeType.Accessories, FaceAttributeType.Age, FaceAttributeType.Blur,
+                FaceAttributeType.Exposure, FaceAttributeType.FacialHair, FaceAttributeType.Gender,
+                FaceAttributeType.Glasses, FaceAttributeType.Hair, FaceAttributeType.HeadPose,
+                FaceAttributeType.Makeup, FaceAttributeType.Noise, FaceAttributeType.Occlusion,
+                FaceAttributeType.Smile
+            };
+
+            try
+            {
+                await RunOperationOnImage(async stream =>
                 {
-                    var faceRectangle = face.Face.FaceRectangle;
-                    var pen = new Pen(face.Color, 5);
-                    var rectangle = new Rectangle(faceRectangle.Left,
-                                                  faceRectangle.Top,
-                                                  faceRectangle.Width,
-                                                  faceRectangle.Height);
+                    faces = await FaceClient.DetectAsync(stream, returnFaceAttributes: faceAttributeTypes);
+                    faceIds = faces.Select(f => f.FaceId).ToArray();
 
-                    g.DrawRectangle(pen, rectangle);
+                    if(faceIds.Length > 0)
+                    {
+                        results = await FaceClient.IdentifyAsync(personGroupId, faceIds);
+                    }
+                });
+
+                if (faceIds.Length == 0)
+                {
+                    model.Error = "No faces detected";
+                    return View(model);
+                }
+            }
+            catch (FaceAPIException faex)
+            {
+                model.Error = faex.ErrorMessage;
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                model.Error = ex.Message;
+                return View(model);
+            }
+
+            foreach (var result in results)
+            {
+                var identifiedFace = new IdentifiedFace();
+                identifiedFace.Face = faces.FirstOrDefault(f => f.FaceId == result.FaceId);
+
+                foreach (var candidate in result.Candidates)
+                {
+                    var person = await FaceClient.GetPersonAsync(personGroupId, candidate.PersonId);
+
+                    identifiedFace.PersonCandidates.Add(person.PersonId, person.Name);
                 }
 
-                nonIndexedImg.Save(mem, ImageFormat.Png);
-
-                var base64 = Convert.ToBase64String(mem.ToArray());
-                model.ImageDump = String.Format("data:image/png;base64,{0}", base64);
+                identifiedFace.Color = Settings.ImageSquareColors[model.IdentifiedFaces.Count];
+                model.IdentifiedFaces.Add(identifiedFace);
             }
+
+            model.ImageDump = GetInlineImageWithFaces(model.IdentifiedFaces.Select(f => f.Face));
 
             return View(model);
         }
