@@ -108,7 +108,7 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
             Face[] faces = new Face[] { };
             Guid[] faceIds = new Guid[] { };
             IdentifyResult[] results = new IdentifyResult[] { };
-
+            
             await RunOperationOnImage(async stream =>
             {
                 faces = await FaceClient.DetectAsync(stream);
@@ -134,7 +134,6 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
                 foreach(var candidate in result.Candidates)
                 {
                     var person = await FaceClient.GetPersonAsync(personGroupId, candidate.PersonId);
-
                     identifiedFace.PersonCandidates.Add(person.PersonId, person.Name);
                 }
 

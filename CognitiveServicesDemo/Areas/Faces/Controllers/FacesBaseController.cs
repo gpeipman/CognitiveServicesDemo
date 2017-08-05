@@ -34,10 +34,11 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
             {
                 g.DrawImage(img, 0, 0, img.Width, img.Height);
 
-                var pen = new Pen(Color.Red, 5);
+                var i = 0;
 
                 foreach (var face in faces)
                 {
+                    var pen = new Pen(Settings.ImageSquareColors[i], 5);
                     var faceRectangle = face.FaceRectangle;
                     var rectangle = new Rectangle(faceRectangle.Left,
                                                   faceRectangle.Top,
@@ -45,6 +46,7 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
                                                   faceRectangle.Height);
 
                     g.DrawRectangle(pen, rectangle);
+                    i++;
                 }
 
                 nonIndexedImg.Save(mem, ImageFormat.Png);

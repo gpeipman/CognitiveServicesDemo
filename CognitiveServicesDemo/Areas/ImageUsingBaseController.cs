@@ -15,14 +15,15 @@ namespace CognitiveServicesDemo.Areas
         {
             var image = Image.FromStream(fromStream);
 
-            if (image.Width <= 600)
+            if (image.Width <= 1200)
             {
+                fromStream.Seek(0, SeekOrigin.Begin);
                 fromStream.CopyTo(toStream);
                 image.Dispose();
                 return;
             }
-            var scaleFactor = 600 / (double)image.Width;
-            var newWidth = 600;
+            var scaleFactor = 1200 / (double)image.Width;
+            var newWidth = 1200;
             var newHeight = (int)(image.Height * scaleFactor);
             var thumbnailBitmap = new Bitmap(newWidth, newHeight);
 
