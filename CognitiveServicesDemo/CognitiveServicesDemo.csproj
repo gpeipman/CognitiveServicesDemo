@@ -188,6 +188,7 @@
     <Content Include="Areas\ComputerVision\Views\_ViewStart.cshtml" />
     <Content Include="Areas\ComputerVision\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\ComputerVision\Views\Home\Index.cshtml" />
+    <Content Include="Areas\Faces\Views\PersonGroups\Edit.cshtml" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />

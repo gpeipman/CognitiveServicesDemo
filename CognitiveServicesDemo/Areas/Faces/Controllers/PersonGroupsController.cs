@@ -65,6 +65,22 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
+        public async Task<ActionResult> Edit(string id)
+        {
+            var model = await FaceClient.GetPersonGroupAsync(id);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Edit(PersonGroup model)
+        {
+            await FaceClient.UpdatePersonGroupAsync(model.PersonGroupId, model.Name, model.UserData);
+
+            return RedirectToAction("Index");
+        }
+
         public async Task<ActionResult> Train(string id)
         {
             await FaceClient.TrainPersonGroupAsync(id);

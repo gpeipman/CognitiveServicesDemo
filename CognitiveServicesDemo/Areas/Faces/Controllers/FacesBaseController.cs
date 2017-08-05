@@ -58,7 +58,7 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
         {
             base.OnActionExecuting(filterContext);
 
-            ViewBag.LeftMenu = "_FacesMenu";            
+            ViewBag.LeftMenu = "_FacesMenu";
         }
 
         protected override void OnException(ExceptionContext filterContext)

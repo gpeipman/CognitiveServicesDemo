@@ -1,6 +1,6 @@
 ﻿@model PersonGroup
 @{
-    ViewBag.Title = "Create person group";
+    ViewBag.Title = "Edit person group";
 }
 
 <h2>Create person group</h2>
@@ -12,14 +12,7 @@
     <div class="form-horizontal">
         <hr />
         @Html.ValidationSummary(false, null, new { @class = "text-danger" })
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.PersonGroupId, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.PersonGroupId, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.PersonGroupId, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        @Html.HiddenFor(m => m.PersonGroupId)
 
         <div class="form-group">
             @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
