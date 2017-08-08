@@ -44,18 +44,15 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
 
             var imageResult = "";
             var file = Request.Files[0];
-            Face[] faces;
+            Face[] faces = new Face[] { };
 
-            // input stream will be actually disposed by client
-            using (var analyzeCopyBuffer = new MemoryStream())
+            await RunOperationOnImage(async stream =>
             {
-                file.InputStream.CopyTo(analyzeCopyBuffer);
-                file.InputStream.Seek(0, SeekOrigin.Begin);
-                analyzeCopyBuffer.Seek(0, SeekOrigin.Begin);
-                faces = await FaceClient.DetectAsync(analyzeCopyBuffer, returnFaceLandmarks: true);
-            }
+                faces = await FaceClient.DetectAsync(stream, returnFaceLandmarks: true);
+            });
 
-            using (var img = new Bitmap(file.InputStream))
+            ImageToProcess.Seek(0, SeekOrigin.Begin);
+            using (var img = new Bitmap(ImageToProcess))
             // make copy, drawing on indexed pixel format image is not supported
             using (var nonIndexedImg = new Bitmap(img.Width, img.Height))
             using (var g = Graphics.FromImage(nonIndexedImg))
