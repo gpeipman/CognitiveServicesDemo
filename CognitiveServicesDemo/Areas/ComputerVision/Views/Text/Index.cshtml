@@ -1,0 +1,35 @@
+﻿@model RecognizeTextModel
+@{
+    ViewBag.Title = "Recognize text";
+}
+
+<h2>Recognize text</h2>
+
+@Html.Partial("_Upload")
+
+@if (Model != null && !string.IsNullOrEmpty(Model.ImageDump))
+{
+    <img src="@Model.ImageDump" width="600" />
+
+    <h3>Texts</h3>
+
+    <ol>
+    @foreach(var result in Model.Results.Regions)
+    {
+        <li>
+            @result.BoundingBox
+            <ul>
+                @foreach(var line in result.Lines)
+                {
+                    <li>
+                        @foreach(var word in line.Words)
+                        {
+                            <text>@word.Text</text>
+                        }
+                    </li>
+                }
+            </ul>
+        </li>
+    }
+    </ol>
+}
