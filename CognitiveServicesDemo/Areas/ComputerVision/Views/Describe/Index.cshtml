@@ -1,0 +1,73 @@
+﻿@model DescribeImageModel
+@{
+    ViewBag.Title = "Describe image";
+}
+
+<h2>Describe image</h2>
+
+@Html.Partial("_Upload")
+
+@if (Model != null && !string.IsNullOrEmpty(Model.ImageDump))
+{
+    <img src="@Model.ImageDump" width="600" />
+    <h3>Description</h3>
+    <table class="table-bordered">
+        <tr>
+            <th>Adult content</th>
+            <td>@Model.Result.Adult.IsAdultContent</td>
+        </tr>
+        <tr>
+            <th>Racy content</th>
+            <td>@Model.Result.Adult.IsRacyContent</td>
+        </tr>
+        <tr>
+            <th>Categories</th>
+            <td>@string.Join(", ", Model.Result.Categories.Select(c => c.Name).ToArray())</td>
+        </tr>
+        <tr>
+            <th>Accent color</th>
+            <td>@Model.Result.Color.AccentColor</td>
+        </tr>
+        <tr>
+            <th>Dominant background color</th>
+            <td>@Model.Result.Color.DominantColorBackground</td>
+        </tr>
+        <tr>
+            <th>Dominant foreground color</th>
+            <td>@Model.Result.Color.DominantColorForeground</td>
+        </tr>
+        <tr>
+            <th>Dominant colors</th>
+            <td>@string.Join(", ", Model.Result.Color.DominantColors)</td>
+        </tr>
+        <tr>
+            <th>Black-white</th>
+            <td>@Model.Result.Color.IsBWImg</td>
+        </tr>
+        <tr>
+            <th>Description</th>
+            <td>
+                @foreach(var cap in Model.Result.Description.Captions)
+                {
+                    <text>@cap.Text  <br /></text>
+                }
+            </td>
+        </tr>
+        <tr>
+            <th>Clip art type</th>
+            <td>@Model.Result.ImageType.ClipArtType</td>
+        </tr>
+        <tr>
+            <th>Line drawing type</th>
+            <td>@Model.Result.ImageType.LineDrawingType</td>
+        </tr>
+        <tr>
+            <th>Metadata</th>
+            <td>@Model.Result.Metadata.Format (@Model.Result.Metadata.Width x @Model.Result.Metadata.Height)</td>
+        </tr>
+        <tr>
+            <th>Tags</th>
+            <td>@string.Join(", ", Model.Result.Tags.Select(t => t.Name).ToArray())</td>
+        </tr>
+    </table>
+}
