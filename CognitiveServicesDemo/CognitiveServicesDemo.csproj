@@ -26,6 +26,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <TargetFrameworkProfile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -225,8 +226,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\ComputerVision\Models\" />
-    <Folder Include="Areas\Faces\Views\Home\" />
-    <Folder Include="Views\ImageUsingBase\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

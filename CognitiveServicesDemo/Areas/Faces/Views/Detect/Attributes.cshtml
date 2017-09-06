@@ -3,7 +3,16 @@
     ViewBag.Title = "Face attributes";
     var groups = (PersonGroup[])ViewBag.PersonGroups;
 }
-
+<style>
+    #attributesTable th,
+    #attributesTable td {
+        padding: 3px;
+    }
+    #attributesTable th,
+    #attributesTable tr td:first-child {
+        background-color: whitesmoke;
+    }
+</style>
 <h2>Face attributes</h2>
 
 @if (Model.Error != null)
@@ -18,12 +27,11 @@
     <br /><img src="@Model.ImageDump" width="600" style="border: 1px solid darkgray" />
 
     <h3>Faces</h3>
-
-    <table class="table-bordered">
+    <table class="table-bordered table-hover" id="attributesTable">
         <thead>
             <tr>
-                <th></th>
                 <th>Person</th>
+                <th>Accessories</th>
                 <th>Age</th>
                 <th>Blur</th>
                 <th>Exposure</th>
@@ -34,17 +42,37 @@
                 <th>Glasses</th>
                 <th>Bald</th>
                 <th>Hair color</th>
+                <th>Hair invisible</th>
+                <th>Head pose pitch</th>
+                <th>Head pose roll</th>
+                <th>Head pose yaw</th>
                 <th>Eye makeup</th>
                 <th>Lips makeup</th>
                 <th>Noise</th>
+                <th>Eye occluded</th>
+                <th>Forehead occluded</th>
+                <th>Mouth occluded</th>
+                <th>Smile</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var face in Model.IdentifiedFaces)
             {
                 <tr>
-                    <td><div style="display:inline-block; width:10px; height:10px; background-color: @face.GetHtmlColor()"></div></td>
-                    <td style="text-align:right">@string.Join(", ", face.PersonCandidates.Select(p => p.Value).ToArray())</td>
+                    <td style="text-align:right" class="blah">
+                        <div style="display:inline-block; width:10px; height:10px; background-color: @face.GetHtmlColor()"></div>
+                        @string.Join(", ", face.PersonCandidates.Select(p => p.Value).ToArray())
+                    </td>
+                    <td style="text-align:right">
+                        @if (face.Face.FaceAttributes.Accessories != null)
+                        {
+                            foreach (var accessory in face.Face.FaceAttributes.Accessories)
+                            {
+                                <text>@accessory.Type</text>
+                            }
+                        }
+                        &nbsp;
+                    </td>
                     <td style="text-align:right">@face.Face.FaceAttributes.Age.ToString("0")</td>
                     <td style="text-align:right">@face.Face.FaceAttributes.Blur.BlurLevel</td>
                     <td style="text-align:right">@face.Face.FaceAttributes.Exposure.ExposureLevel</td>
@@ -56,17 +84,74 @@
                     <td style="text-align:right">@face.Face.FaceAttributes.Hair.Bald.ToString("0")%</td>
                     @if (face.Face.FaceAttributes.Hair.HairColor.Length > 0)
                     {
-                        <td style="text-align:right">@face.Face.FaceAttributes.Hair.HairColor[0].Color</td>
+                        <td style="text-align:right">
+                            @string.Join(", ", face.Face.FaceAttributes.Hair.HairColor.Select(c => c.Color.ToString()))
+                        </td>
                     }
                     else
                     {
-                        <td style="text-align:right"></td>
+                        <td style="text-align:right">&nbsp;</td>
                     }
+                    <td style="text-align:right">@face.Face.FaceAttributes.Hair.Invisible</td>
+                    <td style="text-align:right">@face.Face.FaceAttributes.HeadPose.Pitch</td>
+                    <td style="text-align:right">@face.Face.FaceAttributes.HeadPose.Roll</td>
+                    <td style="text-align:right">@face.Face.FaceAttributes.HeadPose.Yaw</td>
                     <td style="text-align:right">@face.Face.FaceAttributes.Makeup.EyeMakeup</td>
                     <td style="text-align:right">@face.Face.FaceAttributes.Makeup.LipMakeup</td>
                     <td style="text-align:right">@face.Face.FaceAttributes.Noise.NoiseLevel</td>
+                    <td style="text-align:right">@face.Face.FaceAttributes.Occlusion.EyeOccluded</td>
+                    <td style="text-align:right">@face.Face.FaceAttributes.Occlusion.ForeheadOccluded</td>
+                    <td style="text-align:right">@face.Face.FaceAttributes.Occlusion.MouthOccluded</td>
+                    <td style="text-align:right">@face.Face.FaceAttributes.Smile</td>
                 </tr>
             }
         </tbody>
     </table>
+}
+@section scripts {
+    <script>
+        $(document).ready(function () {
+
+            // https://stackoverflow.com/questions/25792178/jquery-to-transpose-html-table-with-header-and-footer
+            function tableTransform(objTable) {
+                if (typeof objTable != 'undefined') {
+                    objTable.each(function () {
+                        var $this = $(this);
+                        var newrows = [];
+                        $this.find("tbody tr, thead tr").each(function () {
+                            var i = 0;
+                            $(this).find("td, th").each(function () {
+                                i++;
+                                if (newrows[i] === undefined) {
+                                    newrows[i] = $("<tr></tr>");
+                                }
+                                newrows[i].append($(this));
+                            });
+                        });
+                        $this.find("tr").remove();
+                        $.each(newrows, function () {
+                            $this.append(this);
+                        });
+                    });
+                    //switch old th to td
+                    objTable.find('th').wrapInner('<td />').contents().unwrap();
+                    //move first tr into thead
+                    var thead = objTable.find("thead");
+                    var thRows = objTable.find("tr:first");
+                    var copy = thRows.clone(true).appendTo("thead");
+                    thRows.remove();
+                    //switch td in thead into th
+                    objTable.find('thead tr td').wrapInner('<th />').contents().unwrap();
+                    //add tr back into tfoot
+                    objTable.find('tfoot').append("<tr></tr>");
+                    //add tds into tfoot
+                    objTable.find('tbody tr:first td').each(function () {
+                        objTable.find('tfoot tr').append("<td>&nbsp;</td>");
+                    });
+                    return false;
+                }
+            }
+            tableTransform($("#attributesTable"));
+        });
+    </script>
 }

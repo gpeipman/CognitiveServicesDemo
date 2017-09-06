@@ -197,7 +197,7 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
                 identifiedFace.Color = Settings.ImageSquareColors[model.IdentifiedFaces.Count];
             }
 
-            model.ImageDump = GetInlineImageWithFaces(model.IdentifiedFaces.Select(f => f.Face));
+            model.ImageDump = GetInlineImageWithIdentifiedFaces(model.IdentifiedFaces);
 
             return View(model);
         }
@@ -263,7 +263,7 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
                 model.IdentifiedFaces.Add(identifiedFace);
             }
 
-            model.ImageDump = GetInlineImageWithFaces(model.IdentifiedFaces.Select(f => f.Face));
+            model.ImageDump = GetInlineImageWithIdentifiedFaces(model.IdentifiedFaces);
 
             return View(model);
         }
