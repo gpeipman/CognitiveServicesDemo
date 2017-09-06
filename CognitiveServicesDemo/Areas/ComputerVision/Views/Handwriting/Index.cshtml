@@ -1,0 +1,27 @@
+﻿@model HandwritingModel
+@{
+    ViewBag.Title = "Regognize handwriting";
+}
+
+<h2>Recognize handwriting</h2>
+
+@Html.Partial("_Upload")
+<p>&nbsp;</p>
+@if (Model != null && !string.IsNullOrEmpty(Model.ImageDump))
+{
+    <img src="@Model.ImageDump" width="600" />
+
+    <h3>Texts</h3>
+
+    <ol>
+        @foreach (var line in Model.Result.Lines)
+        {
+            <li>
+                @foreach (var word in line.Words)
+                {
+                    <text>@word.Text</text>
+                }
+                </li>
+        }
+    </ol>
+}

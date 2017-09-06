@@ -139,9 +139,11 @@
     <Compile Include="Areas\ComputerVision\ComputerVisionAreaRegistration.cs" />
     <Compile Include="Areas\ComputerVision\Controllers\ComputerVisionBaseController.cs" />
     <Compile Include="Areas\ComputerVision\Controllers\DescribeController.cs" />
+    <Compile Include="Areas\ComputerVision\Controllers\HandwritingController.cs" />
     <Compile Include="Areas\ComputerVision\Controllers\HomeController.cs" />
     <Compile Include="Areas\ComputerVision\Controllers\TextController.cs" />
     <Compile Include="Areas\ComputerVision\Models\DescribeImageModel.cs" />
+    <Compile Include="Areas\ComputerVision\Models\HandwritingModel.cs" />
     <Compile Include="Areas\ComputerVision\Models\RecognizeTextModel.cs" />
     <Compile Include="Areas\Faces\Controllers\FacesBaseController.cs" />
     <Compile Include="Areas\Faces\Controllers\DetectController.cs" />
@@ -196,6 +198,7 @@
     <Content Include="Areas\ComputerVision\Views\Shared\_ComputerVisionMenu.cshtml" />
     <Content Include="Areas\ComputerVision\Views\Describe\Index.cshtml" />
     <Content Include="Areas\ComputerVision\Views\Text\Index.cshtml" />
+    <Content Include="Areas\ComputerVision\Views\Handwriting\Index.cshtml" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
