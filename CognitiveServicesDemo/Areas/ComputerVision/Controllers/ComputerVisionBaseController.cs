@@ -1,7 +1,13 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Linq;
 using System.Web.Mvc;
 using CognitiveServicesDemo.Models;
 using Microsoft.ProjectOxford.Vision;
+using Microsoft.ProjectOxford.Vision.Contract;
 
 namespace CognitiveServicesDemo.Areas.ComputerVision.Controllers
 {
@@ -14,6 +20,40 @@ namespace CognitiveServicesDemo.Areas.ComputerVision.Controllers
             var apiKey = ConfigurationManager.AppSettings["CognitiveServicesVisionApiKey"];
             var apiRoot = ConfigurationManager.AppSettings["CognitiveServicesVisionApiUrl"];
             VisionServiceClient = new VisionServiceClient(apiKey, apiRoot);
+        }
+
+        protected string GetInlineImageWithLines(HandwritingTextResult result)
+        {
+            ImageToProcess.Seek(0, SeekOrigin.Begin);
+
+            using (var img = new Bitmap(ImageToProcess))
+            // make copy, drawing on indexed pixel format image is not supported
+            using (var nonIndexedImg = new Bitmap(img.Width, img.Height))
+            using (var g = Graphics.FromImage(nonIndexedImg))
+            using (var mem = new MemoryStream())
+            {
+                g.DrawImage(img, 0, 0, img.Width, img.Height);
+
+                var i = 0;
+
+                foreach (var line in result.Lines)
+                {
+                    var pen = new Pen(Settings.ImageSquareColors[i], 5);
+                    var points = line.Polygon.Points.Select(pp => new System.Drawing.Point
+                    {
+                        X = pp.X,
+                        Y = pp.Y
+                    }).ToArray();
+
+                    g.DrawPolygon(pen, points);
+                    i++;
+                }
+
+                nonIndexedImg.Save(mem, ImageFormat.Png);
+
+                var base64 = Convert.ToBase64String(mem.ToArray());
+                return String.Format("data:image/png;base64,{0}", base64);
+            }
         }
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)

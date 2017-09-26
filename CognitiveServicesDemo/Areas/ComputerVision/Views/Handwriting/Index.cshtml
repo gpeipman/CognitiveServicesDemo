@@ -1,6 +1,7 @@
 ﻿@model HandwritingModel
 @{
     ViewBag.Title = "Regognize handwriting";
+    var lineCounter = 0;
 }
 
 <h2>Recognize handwriting</h2>
@@ -16,12 +17,19 @@
     <ol>
         @foreach (var line in Model.Result.Lines)
         {
+            if(lineCounter >= Settings.ImageSquareColors.Length)
+            {
+                lineCounter = 0;
+            }
             <li>
-                @foreach (var word in line.Words)
-                {
-                    <text>@word.Text</text>
-                }
-                </li>
+            @foreach (var word in line.Words)
+            {
+                <span style="color:@Settings.ImageSquareColors[lineCounter].Name">@word.Text</span>
+            }
+            </li>
+            { 
+                lineCounter++;
+            }
         }
     </ol>
 }
