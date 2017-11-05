@@ -73,7 +73,7 @@ namespace CognitiveServicesDemo.Areas.ComputerVision.Controllers
                 foreach (var region in result.Regions)
                 foreach (var line in region.Lines)
                 {
-                    var pen = new Pen(Settings.ImageSquareColors[i], 5);
+                    var pen = new Pen(Settings.ImageSquareColors[i], 2);
                     g.DrawRectangle(pen, new System.Drawing.Rectangle(
                             line.Rectangle.Left,
                             line.Rectangle.Top,
