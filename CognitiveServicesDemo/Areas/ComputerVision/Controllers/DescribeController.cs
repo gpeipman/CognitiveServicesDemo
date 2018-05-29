@@ -17,17 +17,20 @@ namespace CognitiveServicesDemo.Areas.ComputerVision.Controllers
 
             var model = new DescribeImageModel();
 
+            // What features to find on imahe
             var features = new[]
             {
                 VisualFeature.Adult, VisualFeature.Categories, VisualFeature.Color, VisualFeature.Description,
                 VisualFeature.Faces, VisualFeature.ImageType, VisualFeature.Tags
             };
 
+            // Analyze image using copy of input stream
             await RunOperationOnImage(async stream =>
             {
                 model.Result = await VisionServiceClient.AnalyzeImageAsync(stream, features);
             });
 
+            // Convert image to base64 image string
             await RunOperationOnImage(async stream => {
                 var bytes = new byte[stream.Length];
 

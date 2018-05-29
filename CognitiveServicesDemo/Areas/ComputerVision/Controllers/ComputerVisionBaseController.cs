@@ -17,9 +17,9 @@ namespace CognitiveServicesDemo.Areas.ComputerVision.Controllers
 
         public ComputerVisionBaseController()
         {
-            var apiKey = ConfigurationManager.AppSettings["CognitiveServicesVisionApiKey"];
-            var apiRoot = ConfigurationManager.AppSettings["CognitiveServicesVisionApiUrl"];
-            VisionServiceClient = new VisionServiceClient(apiKey, apiRoot);
+        var apiKey = ConfigurationManager.AppSettings["CognitiveServicesVisionApiKey"];
+        var apiRoot = ConfigurationManager.AppSettings["CognitiveServicesVisionApiUrl"];
+        VisionServiceClient = new VisionServiceClient(apiKey, apiRoot);
         }
 
         protected string GetInlineImageWithLines(HandwritingTextResult result)
