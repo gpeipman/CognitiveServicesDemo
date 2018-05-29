@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using CognitiveServicesDemo.Areas.ComputerVision.Models;
 using Microsoft.ProjectOxford.Vision;
-using Microsoft.ProjectOxford.Vision.Contract;
 
 namespace CognitiveServicesDemo.Areas.ComputerVision.Controllers
 {
@@ -32,7 +31,7 @@ namespace CognitiveServicesDemo.Areas.ComputerVision.Controllers
             await RunOperationOnImage(async stream => {
                 var bytes = new byte[stream.Length];
 
-                stream.Read(bytes, 0, bytes.Length);
+                await stream.ReadAsync(bytes, 0, bytes.Length);
 
                 var base64 = Convert.ToBase64String(bytes);
                 model.ImageDump = String.Format("data:image/png;base64,{0}", base64);
