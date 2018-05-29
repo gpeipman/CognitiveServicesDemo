@@ -38,6 +38,10 @@ namespace CognitiveServicesDemo.Areas.ComputerVision.Controllers
 
                 foreach (var line in result.Lines)
                 {
+                    if(i >= Settings.ImageSquareColors.Length)
+                    {
+                        i = 0;
+                    }
                     var pen = new Pen(Settings.ImageSquareColors[i], 5);
                     var points = line.Polygon.Points.Select(pp => new System.Drawing.Point
                     {
