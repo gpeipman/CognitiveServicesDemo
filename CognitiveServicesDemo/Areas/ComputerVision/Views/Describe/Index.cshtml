@@ -22,7 +22,7 @@
         </tr>
         <tr>
             <th>Categories</th>
-            <td>@string.Join(", ", Model.Result.Categories.Select(c => c.Name).ToArray())</td>
+            <td>@string.Join(", ", Model.Result.Categories.Select(c => c.Name + " (" + c.Detail + ")").ToArray())</td>
         </tr>
         <tr>
             <th>Accent color</th>
