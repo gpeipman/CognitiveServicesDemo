@@ -112,6 +112,7 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
 
             try
             {
+                Request.Files[0].InputStream.Seek(0,SeekOrigin.Begin);
                 await FaceClient.AddPersonFaceAsync(id, personId, Request.Files[0].InputStream);
             }
             catch (Exception ex)
