@@ -122,5 +122,13 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
 
             return RedirectToAction("Index", new { id = id });
         }
+        
+        [HttpGet]
+        public async Task<ActionResult> Delete(string id, string personId)
+        {
+            var personGuid = Guid.Parse(Request["personId"]);
+            await FaceClient.DeletePersonAsync(id, personGuid);
+            return RedirectToAction("Index", new { id = id });
+        }
     }
 }
