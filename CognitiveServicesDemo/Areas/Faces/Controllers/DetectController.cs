@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -153,6 +153,8 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
                 Value = g.PersonGroupId,
                 Text = g.Name
             }).ToList();
+            model.PersonGroups.Insert(0, new SelectListItem { Text = "", Value = "" });
+
 
             if (Request.HttpMethod == "GET")
             {
@@ -169,7 +171,7 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
                 faces = await FaceClient.DetectAsync(stream, returnFaceAttributes: emotionsType);
                 faceIds = faces.Select(f => f.FaceId).ToArray();
 
-                if (faceIds.Length > 0)
+                if (faceIds.Length > 0 && !string.IsNullOrEmpty(personGroupId))
                 {
                     results = await FaceClient.IdentifyAsync(personGroupId, faceIds);
                 }
@@ -181,21 +183,35 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
                 return View(model);
             }
 
-            foreach (var result in results)
+            if (!string.IsNullOrEmpty(personGroupId))
             {
-                var identifiedFace = new IdentifiedFace();
-                identifiedFace.Face = faces.FirstOrDefault(f => f.FaceId == result.FaceId);
-
-                foreach (var candidate in result.Candidates)
+                foreach (var result in results)
                 {
-                    var person = await FaceClient.GetPersonAsync(personGroupId, candidate.PersonId);
+                    var identifiedFace = new IdentifiedFace();
+                    identifiedFace.Face = faces.FirstOrDefault(f => f.FaceId == result.FaceId);
 
-                    identifiedFace.PersonCandidates.Add(person.PersonId, person.Name);
+                    foreach (var candidate in result.Candidates)
+                    {
+                        var person = await FaceClient.GetPersonAsync(personGroupId, candidate.PersonId);
+
+                        identifiedFace.PersonCandidates.Add(person.PersonId, person.Name);
+                    }
+
+                    model.IdentifiedFaces.Add(identifiedFace);
+                    identifiedFace.Color = Settings.ImageSquareColors[model.IdentifiedFaces.Count];
                 }
-                
-                model.IdentifiedFaces.Add(identifiedFace);
-                identifiedFace.Color = Settings.ImageSquareColors[model.IdentifiedFaces.Count];
             }
+            else
+            {               
+                foreach(var face in faces)
+                {
+                    var identifiedFace = new IdentifiedFace { Face = face };
+                    model.IdentifiedFaces.Add(identifiedFace);
+
+                    identifiedFace.Color = Settings.ImageSquareColors[model.IdentifiedFaces.Count];
+                }
+            }
+
 
             model.ImageDump = GetInlineImageWithIdentifiedFaces(model.IdentifiedFaces);
 
