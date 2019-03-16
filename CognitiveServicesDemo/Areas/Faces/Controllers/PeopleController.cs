@@ -112,6 +112,7 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
 
             try
             {
+                Request.Files[0].InputStream.Seek(0,SeekOrigin.Begin);
                 await FaceClient.AddPersonFaceAsync(id, personId, Request.Files[0].InputStream);
             }
             catch (Exception ex)
@@ -120,6 +121,14 @@ namespace CognitiveServicesDemo.Areas.Faces.Controllers
                 return View();
             }
 
+            return RedirectToAction("Index", new { id = id });
+        }
+        
+        [HttpGet]
+        public async Task<ActionResult> Delete(string id, string personId)
+        {
+            var personGuid = Guid.Parse(Request["personId"]);
+            await FaceClient.DeletePersonAsync(id, personGuid);
             return RedirectToAction("Index", new { id = id });
         }
     }
